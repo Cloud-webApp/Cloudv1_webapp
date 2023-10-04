@@ -8,7 +8,7 @@ import app from "../../app.js";
 import * as dotenv from 'dotenv';
 dotenv.config()
 
-const app = express();
+//const app = express();
 app.use(bodyParser.json());
 app.use(router);
 describe("Healthz Endpoint", () => {
