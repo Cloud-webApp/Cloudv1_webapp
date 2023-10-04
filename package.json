@@ -9,8 +9,9 @@
   "type": "module",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "jest tests/integration"
+    "test:integration": "jest tests/integration"
   },
+  
   "author": "Altaf",
   "license": "ISC",
   "devDependencies": {
