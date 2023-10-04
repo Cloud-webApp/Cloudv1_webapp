@@ -1,29 +1,21 @@
-name: Build CI
-
- 
+name: NODE  CI
 
 on:
   pull_request:
     branches:
       - main # Assuming your primary branch is named 'main'
-
- 
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
- 
-
     services:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: ${{ secrets.PGDATABASE }}
-          POSTGRES_USER: ${{ secrets.PGUSER }}
-          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
-          POSTGRES_PORT: ${{ secrets.PGPORT }}
-          POSTGRES_HOST: ${{ secrets.PGHOST }}
+          POSTGRES_DB: ${{ secrets.DB_DATABASE }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_PORT: ${{ secrets.DB_PORT }}
+          POSTGRES_HOST: ${{ secrets.DB_HOST }}
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -39,11 +31,11 @@ jobs:
       - name: "Create env file"
         run: |
           touch .env
-          echo PGDATABASE=${{ secrets.PGDATABASE }} >> .env
-          echo PGUSER=${{ secrets.PGUSER }} >> .env
-          echo PGPASSWORD=${{ secrets.PGPASSWORD }} >> .env
-          echo PGPORT=${{ secrets.PGPORT }} >> .env
-          echo PGHOST=${{ secrets.PGHOST }} >> .env
+          echo PGDATABASE=${{ secrets.DB_DATABASE }} >> .env
+          echo PGUSER=${{ secrets.DB_USER }} >> .env
+          echo PGPASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo PGPORT=${{ secrets.DB_PORT }} >> .env
+          echo PGHOST=${{ secrets.DB_HOST }} >> .env
           echo "cat .env"
           cat .env
           echo "ls -a ."
@@ -56,7 +48,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 18.x
 
  
 
