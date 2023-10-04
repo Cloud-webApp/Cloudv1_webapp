@@ -89,7 +89,8 @@ assignmentRouter.put("/:id",basicAuthenticator,async (req,res)=>{
     
     await db.assignments.update(updatedAssignment,{where:{assignment_id:assignmentId}});
     
-    return res.status(204).end()//add success messgae
+
+    return res.status(204).send('Resource deleted successfully');
 
    });
 
