@@ -2,19 +2,17 @@
 import request from "supertest";
 import express from "express";
 import bodyParser from "body-parser";
-//import router from "../routes/healthz.route.js";
-//import router from "../../routes/app.route.js";
-import app from "../../app.js";
 import * as dotenv from 'dotenv';
+import router from "../routes/app.route.js"
 dotenv.config()
 
-//const app = express();
+const app = express();
 app.use(bodyParser.json());
 app.use(router);
 describe("Healthz Endpoint", () => {
   it("Return 200 if successful GET requests without body or query", async () => {
     // Mock successful DB connection for this test
-    jest.mock("../../models/index.js" , () => ({
+    jest.mock("../models/index.js" , () => ({
       connectionTest: () => Promise.resolve(),
     }));
     const res = await request(app).get("/healthz");
