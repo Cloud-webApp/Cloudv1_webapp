@@ -32,14 +32,6 @@ export default (sequelize, DataTypes) => {
             allowNull: false,
 
         },
-        createdBy: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        updatedBy: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        }
     }, {
         timestamps: true,
         createdAt: 'assignment_created',
