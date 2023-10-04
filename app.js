@@ -1,10 +1,14 @@
 import express from 'express';
 import appRoute from './routes/app.route.js';
 import assingmentRoute from "./routes/assignment.route.js";
+import databaseConnectionMiddleware from './middlewares/databaseConnectionMiddleware.js';
+
 const app=express();
 
 const PORT= process.env.PORT || 3000;
 app.use(express.json());
+
+app.use(databaseConnectionMiddleware);
 
 app.use("/healthz",appRoute);
 app.use("/v1/assignment",assingmentRoute);

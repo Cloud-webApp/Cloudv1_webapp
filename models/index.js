@@ -30,7 +30,10 @@ db.sequelize = sequelize;
 db.users = userModel(sequelize, DataTypes)
 
 db.assignments = assignmentModel(sequelize, DataTypes)
-db.users.hasMany(db.assignments, { foreignKey: { name: "user_id" }, onDelete: "CASCADE", field: "user_id", allowNull: false })
+//db.users.hasMany(db.assignments, { foreignKey: { name: "user_id" }, onDelete: "CASCADE", field: "user_id", allowNull: false })
+
+db.users.hasMany(db.assignments, { foreignKey: { name: "createdBy" }, onDelete: "CASCADE", field: "id", allowNull: false })
+db.users.hasMany(db.assignments, { foreignKey: { name: "updatedBy" }, onDelete: "CASCADE", field: "id", allowNull: false })
 
 //ensure that the created date is never updated 
 db.users.beforeUpdate((instance, option) => {
@@ -40,8 +43,10 @@ db.users.beforeUpdate((instance, option) => {
 });
 db.sequelize.sync({ force: true }).then(() => {
 
-    //const userCSVFile = new URL('./users.csv');
-    fs.createReadStream("models/users.csv")
+    // //const userCSVFile = new URL('./users.csv');
+    // fs.createReadStream("models/users.csv")
+    const userCSVFile = new URL('./users.csv', import.meta.url);
+    fs.createReadStream(userCSVFile)
         .pipe(csvParser())
         .on('data', async (data) => {
             // load the data into the database
