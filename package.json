@@ -10,8 +10,7 @@
   "scripts": {
     "start": "node app.js",
     "test:integration": "jest tests/integration"
-},
-  
+  },
   "author": "Altaf",
   "license": "ISC",
   "devDependencies": {
@@ -21,6 +20,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
