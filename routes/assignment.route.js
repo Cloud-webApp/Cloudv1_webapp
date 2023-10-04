@@ -8,8 +8,7 @@ const assignmentRouter= Router();
 const assignmentDb=db.assignments;
 
 assignmentRouter.get("/", async (req,res)=>{
-    // add Validation for the user who create the assignments can only see his assignments
-    const assignmentList= await assignmentDb.findAll({attributes: { exclude: ['user_id'] }});
+     const assignmentList= await assignmentDb.findAll({attributes: { exclude: ['user_id'] }});
     console.log(req.authUser);
     res.status(200).json(assignmentList);
 });
@@ -29,9 +28,7 @@ assignmentRouter.get("/:id",async (req,res)=>{
 
 assignmentRouter.post("/",basicAuthenticator, async (req,res)=>{
 
-    // add Validation for empty body and missing fields
-
-    let {name,points,num_of_attempts,deadline}=req.body;
+    let {name,points,num_of_attemps,deadline}=req.body;
     
     const {isError:isNotValid,errorMessage}=assignmentValidator.validatePostRequest(req);
     if(isNotValid){
@@ -39,10 +36,10 @@ assignmentRouter.post("/",basicAuthenticator, async (req,res)=>{
     }
 
     const tempAssignment={
-        name,points,num_of_attempts,deadline,
+        name,points,num_of_attemps,deadline,
         user_id:req?.authUser?.user_id,
     }
-    //insert the data to data base
+
     const newAssignment= await assignmentDb.create(tempAssignment);
     console.log(newAssignment);
     res.status(201).json(newAssignment);
@@ -79,14 +76,14 @@ assignmentRouter.put("/:id",basicAuthenticator,async (req,res)=>{
     }else if(assignmentInfo.user_id !== req?.authUser?.user_id){
         return res.status(401).json({error:"Your are not authorized user"})
     }
-    const {name,points,num_of_attempts,deadline}= req.body;
+    const {name,points,num_of_attemps,deadline}= req.body;
     
     let updatedAssignment={
         
     }
     updatedAssignment=appendDataToObject(updatedAssignment,'name',name);
     updatedAssignment=appendDataToObject(updatedAssignment,'points',points);
-    updatedAssignment=appendDataToObject(updatedAssignment,'num_of_attempts',num_of_attempts);
+    updatedAssignment=appendDataToObject(updatedAssignment,'num_of_attemps',num_of_attemps);
     updatedAssignment=appendDataToObject(updatedAssignment,'deadline',deadline);
    
     
@@ -94,8 +91,7 @@ assignmentRouter.put("/:id",basicAuthenticator,async (req,res)=>{
     
     return res.status(204).end()//add success messgae
 
-    // check Validation if the user is not entering the id itself
-});
+   });
 
 
 function appendDataToObject(object,field,value){
