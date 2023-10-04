@@ -19,7 +19,7 @@ db.assignments = assignmentsModel(sequelize,DataTypes)
 
 db.users.hasMany(db.assignments,{foreignKey:{name :"user_id"},onDelete:"CASCADE",field:"user_id",allowNull:false})
 
-db.sequelize.sync({force:true}).then(()=>{
+db.sequelize.sync({force:false}).then(()=>{
     console.log("yes re-sync done!")
     insertDataFromCSV()
 });
