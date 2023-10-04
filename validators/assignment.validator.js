@@ -31,7 +31,7 @@ const  validateUpdateRequest= (req)=>{
    const {name,points,num_of_attemps,deadline}=req.body;
    let isError=false;
    let errorMessage="";
-   if(!_.isNil(name) && !_.isEmpty(name)){
+   if(_.isNil(name) && _.isEmpty(name)){
       isError=true;
       errorMessage+="Name cannot be null or empty\n";
    }
