@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import  Router  from 'express';
 import db from "../models/index.js";
 import basicAuthenticator from "../middlewares/basicAuthenticator.js";
 import _ from 'lodash';

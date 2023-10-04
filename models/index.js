@@ -40,8 +40,8 @@ db.users.beforeUpdate((instance, option) => {
 });
 db.sequelize.sync({ force: true }).then(() => {
 
-    const userCSVFile = new URL('./users.csv', import.meta.url);
-    fs.createReadStream(userCSVFile)
+    //const userCSVFile = new URL('./users.csv');
+    fs.createReadStream("models/users.csv")
         .pipe(csvParser())
         .on('data', async (data) => {
             // load the data into the database
