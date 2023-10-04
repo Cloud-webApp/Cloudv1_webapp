@@ -1,17 +1,22 @@
-import 'dotenv/config'
+import dotenv from 'dotenv';
+
 export default {
 
-    HOST:process.env.DB_HOST,
-    PORT:process.env.DB_PORT,
-    USER:process.env.DB_USER,
-    PASSWORD:process.env.DB_PASSWORD,
-    DB:process.env.DB_DATABASE,
-    dialect:process.env.DB_DIALECT,
-    // pool:{
-    //     max:5,
-    //     min:0,
-    //     acquire:30000,
-    //     idle:10000
-    // }
+    HOST:process.env.PGHOST,
+    USER:process.env.PGUSER,
+    PASSWORD:process.env.PGPASSWORD,
+    DB:process.env.PGDATABASE,
+
+    // HOST:"localhost",
+    // USER:"postgres",
+    // PASSWORD:"postgres",
+    // DB:"postgres",
+    dialect:"postgres",
+    pool:{
+        max:5,
+        min:0,
+        acquire:30000,
+        idle:10000
+    }
 
 }

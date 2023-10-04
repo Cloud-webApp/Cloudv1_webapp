@@ -8,9 +8,8 @@
   },
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "test": "jest",
-    "test:integration": "jest tests" 
+   "test": "jest",
+    "start": "nodemon app.js"
   },
   "author": "Altaf",
   "license": "ISC",
