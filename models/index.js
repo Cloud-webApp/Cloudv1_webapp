@@ -58,5 +58,6 @@ db.sequelize.sync({ force: true }).then(() => {
         });
 }).catch(err => console.log("error resync app", err));
 
-export default db;
+export default {db,
+sequelize};
 

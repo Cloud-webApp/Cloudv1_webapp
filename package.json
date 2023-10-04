@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "test:integration": "jest tests/integration"
+    "test": "jest"
   },
   "author": "Altaf",
   "license": "ISC",
