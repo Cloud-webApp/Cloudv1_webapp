@@ -3,11 +3,12 @@ import request from "supertest";
 import express from "express";
 import bodyParser from "body-parser";
 //import router from "../routes/healthz.route.js";
-import router from "../../routes/app.route.js";
+//import router from "../../routes/app.route.js";
+import app from "../../app.js";
 import * as dotenv from 'dotenv';
 dotenv.config()
 
-const app = express();
+//const app = express();
 app.use(bodyParser.json());
 app.use(router);
 describe("Healthz Endpoint", () => {
