@@ -8,9 +8,9 @@
   },
   "type": "module",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test:integration": "jest tests/integration"
-  },
+},
   
   "author": "Altaf",
   "license": "ISC",
