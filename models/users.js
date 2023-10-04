@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 export default (sequelize, DataTypes) => {
-    
+
 
     const User = sequelize.define("user", {
         user_id: {
@@ -13,6 +13,7 @@ export default (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        
         last_name: {
             type: DataTypes.STRING,
             allowNull: false,
