@@ -1,12 +1,12 @@
 # Web-App 
 
-This web application provides a platform for managing Assignments by different Users.
+This web application provides a platform for managing assignments by different users.
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 - Node.js installed
-- Postgres database set up
+- PostgreSQL database set up
 - Clone this repository
 
 ## Build and Deploy
@@ -16,6 +16,7 @@ Before you begin, ensure you have met the following requirements:
    ```bash
    mkdir web-app
    cd web-app
+
 2. **Initialize new Node.js project:**
    ```bash
    npm init
@@ -37,11 +38,12 @@ Before you begin, ensure you have met the following requirements:
 
 5. **Scripts**
   ```bash
-"type": "module",
-  "scripts": {
-    "test": "jest",
-    "start": "nodemon app.js"
-  },
+   "type": "module",
+   "scripts": {
+   "test": "jest",
+   "start": "nodemon app.js"
+   }
+
 
 7. **Starting the Application:**
    ```bash
