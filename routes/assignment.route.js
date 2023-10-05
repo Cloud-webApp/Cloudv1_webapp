@@ -23,7 +23,30 @@ assignmentRouter.use("/", async (req, res, next) => {
 });
 
 // GET all assignments
+// assignmentRouter.get("/", queryParameterValidators, async (req, res) => {
+//   try {
+//     const assignmentList = await assignmentDb.findAll({
+//       attributes: { exclude: ["user_id"] },
+//     });
+
+//     res.status(200).json(assignmentList);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send(); // Internal Server Error
+//   }
+// });
+// GET all assignments
 assignmentRouter.get("/", queryParameterValidators, async (req, res) => {
+  if (Object.keys(req.query).length > 0) {
+    // If query parameters are present, return a 400 Bad Request
+    return res.status(400).json({ errorMessage: "Query parameters are not allowed for this endpoint." });
+  }
+
+  if (Object.keys(req.body).length > 0) {
+    // If there is a request body (payload), return a 400 Bad Request
+    return res.status(400).json({ errorMessage: "Payload is not allowed for this endpoint." });
+  }
+
   try {
     const assignmentList = await assignmentDb.findAll({
       attributes: { exclude: ["user_id"] },
@@ -35,6 +58,7 @@ assignmentRouter.get("/", queryParameterValidators, async (req, res) => {
     res.status(500).send(); // Internal Server Error
   }
 });
+
 
 // GET assignment by ID
 assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {

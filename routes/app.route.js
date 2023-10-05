@@ -2,11 +2,11 @@ import sequelize from "../sequelize.js";
 
 // check the health of the application
 const checkHealth = async (req, res) => {
-  if (req.method === 'GET' && req.headers['content-length'] > 0) {
-    // get payload
-    res.status(400).send();             //works
+  if (req.method === 'GET' && (req.headers['content-length'] > 0 || Object.keys(req.query).length > 0)) {
+    // GET request with payload in either body or query parameters
+    res.status(400).json({ errorMessage: "Payload in query parameters is not allowed." });
   } else if (req.method === 'GET') {
-    // get without payload
+    // GET without payload
     try {
       await sequelize.authenticate();
       res.set('Cache-control', 'no-cache');
@@ -16,10 +16,9 @@ const checkHealth = async (req, res) => {
       res.status(503).send();
     }
   } else {
-    // all other request
-    res.status(405).send();   //works
+    // All other request methods
+    res.status(405).send();
   }
 };
 
 export default checkHealth;
-
