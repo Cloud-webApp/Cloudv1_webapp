@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "start": "app.js"
+    "start": "nodemon app.js"
   },
   "author": "Altaf",
   "license": "ISC",
