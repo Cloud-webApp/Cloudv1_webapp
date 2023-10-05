@@ -8,6 +8,22 @@ import queryParameterValidators from "../validators/queryParameterValidators.js"
 const assignmentRouter = Router();
 const assignmentDb = db.assignments;
 
+// Middleware to restrict HTTP methods for /healthz
+assignmentRouter.use("/healthz", async (req, res, next) => {
+  if (req.baseUrl === "/healthz") {
+    if (req.method === "GET" && req.body === undefined) {
+      // Allow only GET requests without a payload
+      next();
+    } else {
+      res.status(405).send(); // Method Not Allowed for other requests
+    }
+  } else {
+    next();
+  }
+});
+
+
+
 // Middleware to restrict HTTP methods
 assignmentRouter.use("/", async (req, res, next) => {
   if (

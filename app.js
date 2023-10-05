@@ -10,9 +10,11 @@ app.use(express.json());
 app.use("/healthz", appRoute);
 app.use("/v1/assignments", assignmentRoute);
 
-//  503 status for any other request
-app.use("/", (req, res) => res.status(503).send());   //503 or 404
 
+
+//  503 status for any other request
+//app.use("/", (req, res) => res.status(503).send());   //503 or 404
+app.use("/", (req, res) => res.status(404).send());
 //  Express server
 app.listen(PORT, (err) => {
     if (err) {
