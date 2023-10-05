@@ -1,4 +1,5 @@
 # Web-App 
+Developed by Altaf Shaikh
 
 This web application provides a platform for managing assignments by different users.
 
@@ -37,6 +38,7 @@ Before you begin, ensure you have met the following requirements:
    DB_DIALECT=postgres
 
 5. **Scripts**
+   
   ```bash
    "type": "module",
    "scripts": {
@@ -44,7 +46,7 @@ Before you begin, ensure you have met the following requirements:
    "start": "nodemon app.js"
    }
 
-
-7. **Starting the Application:**
+6. **Starting the Application:**
+   
    ```bash
    node app.js  //or npm start 
