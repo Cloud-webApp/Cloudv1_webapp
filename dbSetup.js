@@ -4,27 +4,35 @@ import { Sequelize, DataTypes } from "sequelize";
 import insertDataFromCSV from "./csv-parser.js";
 import assignmentsModel from "./models/assignments.js";
 
-
-sequelize.authenticate().then(()=>{
+// db authenticae
+sequelize.authenticate().then(() => {
     console.log("Connected to the database")
-}).catch(err=>{
+}).catch(err => {
     console.error("Error while connecting to the db", err)
 })
 
-const db={};
-db.Sequelize= Sequelize
-db.sequelize=sequelize;
-db.users= userModel(sequelize,DataTypes)
-db.assignments = assignmentsModel(sequelize,DataTypes)
+const db = {};
 
-db.users.hasMany(db.assignments,{foreignKey:{name :"user_id"},onDelete:"CASCADE",field:"user_id",allowNull:false})
+// Sequelize and sequelize properties 
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-db.sequelize.sync({force:false}).then(()=>{
-    console.log("yes re-sync done!")
-    insertDataFromCSV()
+//  users  assignments models
+db.users = userModel(sequelize, DataTypes);
+db.assignments = assignmentsModel(sequelize, DataTypes);
+
+//relation 
+db.users.hasMany(db.assignments, {
+    foreignKey: { name: "user_id" },
+    onDelete: "CASCADE",
+    field: "user_id",
+    allowNull: false
 });
 
+db.sequelize.sync({ force: false }).then(() => {
+    console.log("Database schema synchronized successfully.")
+    
+    insertDataFromCSV();
+});
 
 export default db;
-
-
