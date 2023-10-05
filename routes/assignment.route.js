@@ -130,7 +130,18 @@ assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
   if (isNotValid) {
     return res.status(400).json({ errorMessage });
   }
+ // Check for extra keys in the request body
+ const expectedKeys = ["name", "points", "num_of_attemps", "deadline"];
 
+ const extraKeys = Object.keys(req.body).filter(
+  (key) => !expectedKeys.includes(key)
+);
+
+if (extraKeys.length > 0) {
+  return res.status(400).json({
+    errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
+  });
+}
   try {
     const assignmentInfo = await db.assignments.findOne({
       where: { assignment_id: assignmentId },

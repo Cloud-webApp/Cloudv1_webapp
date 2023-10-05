@@ -7,17 +7,31 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/healthz", appRoute);
-app.use("/v1/assignments", assignmentRoute);
+app.use("/healthz", appRoute); // Route for /healthz
+app.use("/v1/assignments", assignmentRoute); // Route for /v1/assignments
 
-//  503 status for any other request
-//app.use("/", (req, res) => res.status(503).send());   //503 or 404
-app.use("/", (req, res) => res.status(404).send());
-//  Express server
-app.listen(PORT, (err) => {
-    if (err) {
-        console.log("Failed to start the application");
-    } else {
-        console.log("Application running on port number", PORT);
-    }
+
+// Middleware for all other routes
+app.use("/", (req, res) => {
+  res.status(404).send(); // Return 503 Service Unavailable for all other routes
 });
+
+// Express server
+app.listen(PORT, (err) => {
+  if (err) {
+    console.log("Failed to start the application");
+  } else {
+    console.log("Application running on port number", PORT);
+  }
+});
+
+// // Middleware for /healthz only
+// app.use("/healthz", (req, res, next) => {
+//   if (req.method === "GET") {
+//     res.status(200).send(); // Return 200 OK for GET requests to /healthz
+//   } else {
+//     console.log(req.method,'405 checker');
+//     res.status(405).send(); // Return 405 Not Found for all other requests to /healthz
+    
+//   }
+// });
