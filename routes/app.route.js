@@ -4,7 +4,7 @@ import sequelize from "../sequelize.js";
 const checkHealth = async (req, res) => {
   if (req.method === 'GET' && req.headers['content-length'] > 0) {
     // get payload
-    res.status(400).send();
+    res.status(400).send();             //works
   } else if (req.method === 'GET') {
     // get without payload
     try {
@@ -17,7 +17,7 @@ const checkHealth = async (req, res) => {
     }
   } else {
     // all other request
-    res.status(404).send();
+    res.status(405).send();   //works
   }
 };
 
