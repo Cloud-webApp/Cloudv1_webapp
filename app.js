@@ -10,7 +10,6 @@ app.use(express.json());
 app.use("/healthz", appRoute); // Route for /healthz
 app.use("/v1/assignments", assignmentRoute); // Route for /v1/assignments
 
-
 // Middleware for all other routes
 app.use("/", (req, res) => {
   res.status(404).send(); // Return 503 Service Unavailable for all other routes
