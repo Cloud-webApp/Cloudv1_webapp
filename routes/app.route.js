@@ -1,5 +1,6 @@
 import sequelize from "../sequelize.js";
 
+// check the health of the application
 const checkHealth = async (req, res) => {
   const length = req.headers['content-length'];
   if ((req.method === 'GET' && length > 0) || req.url.includes('?')) {
@@ -7,6 +8,7 @@ const checkHealth = async (req, res) => {
   } else {
     try {
       await sequelize.authenticate();
+
       res.set('Cache-control', 'no-cache');
       res.status(200).send();
     } catch (error) {
