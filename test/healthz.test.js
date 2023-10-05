@@ -5,6 +5,7 @@ import router from "../routes/app.route.js";
 import * as dotenv from 'dotenv'
 
 dotenv.config()
+
 const app = express();
 app.use(bodyParser.json());
 app.use(router);
