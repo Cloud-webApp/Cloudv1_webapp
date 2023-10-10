@@ -15,7 +15,7 @@ describe("Healthz Endpoint", () => {
     jest.mock("../dbSetup.js", () => ({
       connectionTest: () => Promise.resolve(),
     }));
-    const res = await request(app).get("/healthz");
+    const res = await request(app).get("/health22");
     expect(res.statusCode).toEqual(200);
 
   });
