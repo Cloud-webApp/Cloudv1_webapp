@@ -3,7 +3,7 @@ name: Build AMI after PR Merge
 on:
   push:
     branches:
-      - feature-ami
+      - feature-ami1
 
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-        
+
       - name: Install Packer
         run: |
           PACKER_VERSION="1.9.4"  # Specify your desired version
