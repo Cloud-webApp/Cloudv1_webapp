@@ -1,0 +1,28 @@
+name: Build Packer AMI
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  build_ami:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if PR is merged
+      run: echo "This step checks if the PR is merged. If it's merged, the workflow will continue. If not, it will be skipped."  # You can implement your own logic to check if the PR is merged.
+
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1  # Adjust the region as needed
+
+    - name: Build Packer AMI
+      run: packer build path/to/your/packer/template.json  # Adjust the path to your Packer template
+
+    - name: Cleanup
+      run: echo "Cleanup steps, if needed."
