@@ -1,28 +1,32 @@
-name: Build Packer AMI
+name: Build AMI after PR Merge
 
 on:
   push:
     branches:
-      - main  # Adjust the branch name as needed
+      - feature-ami
 
 jobs:
-  build_ami:
+  build-ami:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if PR is merged
-      run: echo "This step checks if the PR is merged. If it's merged, the workflow will continue. If not, it will be skipped."  # You can implement your own logic to check if the PR is merged.
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Set up AWS CLI
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-        aws-region: us-east-1  # Adjust the region as needed
+      - name: Install Packer
+        run: |
+          PACKER_VERSION="1.9.4"  # Specify your desired version
+          wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
+          unzip packer_${PACKER_VERSION}_linux_amd64.zip
+          sudo mv packer /usr/local/bin/
+          packer --version
 
-    - name: Build Packer AMI
-      run: packer build path/to/your/packer/template.json  # Adjust the path to your Packer template
+      - name: Initialize Packer
+        run: packer init ami.pkr.hcl
 
-    - name: Cleanup
-      run: echo "Cleanup steps, if needed."
+        
+      - name: Build Custom AMI
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: packer build ami.pkr.hcl
