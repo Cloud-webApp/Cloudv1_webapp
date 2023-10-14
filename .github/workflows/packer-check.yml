@@ -1,4 +1,4 @@
-name: Build AMI after PR Merge
+name: Packer Validation and Formatting Check
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - feature-ami
 
 jobs:
-  build-ami:
+  packer-check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install Packer
@@ -24,8 +24,12 @@ jobs:
       - name: Initialize Packer
         run: packer init ami.pkr.hcl
 
-      - name: Build Custom AMI
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: packer build ami.pkr.hcl
+      - name: Validate Packer Template
+        run: packer validate ami.pkr.hcl
+
+      - name: Check Packer Template Formatting
+        run: |
+          if ! packer fmt -check ami.pkr.hcl; then
+            echo "Packer template is not formatted correctly. Please format using 'packer fmt ami.pkr.hcl' and re-push."
+            exit 1
+          fi
