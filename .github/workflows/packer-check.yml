@@ -24,10 +24,10 @@ jobs:
           packer --version
 
       - name: Initialize Packer
-        run: packer init ami.pkr.hcl
+        run: packer init main.pkr.hcl
 
       - name: Build Custom AMI
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: packer build ami.pkr.hcl
+        run: packer build main.pkr.hcl
