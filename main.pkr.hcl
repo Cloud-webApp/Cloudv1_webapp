@@ -12,10 +12,10 @@ source "amazon-ebs" "debian" {
   source_ami    = "ami-06db4d78cb1d3bbf9"
   instance_type = "t2.micro"
   region        = "us-east-1"
-  profile       = "dev"            # aws cli profile
+  profile       = "dev" # aws cli profile
   ssh_username  = "admin"
 
-  ami_users     = ["274348305701", "661783133001"]  # acc. id
+  ami_users = ["274348305701", "661783133001"] # acc. id
 }
 
 build {
