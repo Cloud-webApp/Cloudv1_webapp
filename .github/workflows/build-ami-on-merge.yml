@@ -3,7 +3,7 @@ name: Build AMI after PR Merge
 on:
   push:
     branches:
-      - feature-ami1
+      - feature-ami1    #branch name change
 
 jobs:
   build-ami:
@@ -23,7 +23,6 @@ jobs:
 
       - name: Initialize Packer
         run: packer init main.pkr.hcl
-
 
       - name: Build Custom AMI
         env:
