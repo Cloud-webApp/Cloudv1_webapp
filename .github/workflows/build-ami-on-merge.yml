@@ -26,8 +26,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
- 
-
       - name: "Create env file"
         run: |
           touch .env
@@ -62,6 +60,9 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Create zip archive from current directory
+        run: zip -r webapp.zip .
 
       - name: Install Packer
         run: |

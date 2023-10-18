@@ -21,10 +21,10 @@ source "amazon-ebs" "debian" {
 build {
   sources = ["source.amazon-ebs.debian"]
 
-  // provisioner "file" {
-  //   source      = "./webapp.zip"
-  //   destination = "/tmp/webapp.zip"
-  // }
+  provisioner "file" {
+    source      = "./webapp.zip"
+    destination = "/tmp/webapp.zip"
+  }
 
   provisioner "file" {
     source      = "setup.sh"
