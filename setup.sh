@@ -17,7 +17,7 @@ sudo apt install -y npm
 nodejs -v
 # Configure PostgreSQL: set password, create database, and create user
 # sudo -u postgres createuser --interactive --pwprompt postgres
-sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'password';"
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
 # sudo -u postgres createdb altafsmba
 
 

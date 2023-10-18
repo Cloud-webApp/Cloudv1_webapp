@@ -66,6 +66,7 @@ build {
       "sudo unzip webapp.zip -d web-app",
       "cd web-app",
       "sudo npm i",
+      "sudo apt-get remove --purge -y git"
     ]
   }
 
