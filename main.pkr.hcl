@@ -48,22 +48,29 @@ build {
   }
 
   #create provisioner for inline
-  provisioner "shell" {
-    script = "setup.sh"
-  }
+  // provisioner "shell" {
+  //   script = "setup.sh"
+  // }
+  // provisioner "shell" {
+  //   inline = [
+  //     "sudo apt-get update",
+  //     "sudo apt-get install -y unzip",
+  //     "sudo chmod +x /home/setup.sh",
+  //     "sudo /home/setup.sh",
+  //     "sudo ls",
+  //     "sudo apt-get install unzip",
+  //     "mkdir webapp",
+  //     "sudo unzip webapp.zip -d webapp",
+  //     "cd webapp",
+  //     "sudo npm i",
+  //   ]
+  // }
   provisioner "shell" {
     inline = [
       "sudo apt-get update",
-      "sudo apt-get install -y expect",
       "sudo apt-get install -y unzip",
       "sudo chmod +x /home/setup.sh",
       "sudo /home/setup.sh",
-      "sudo ls",
-      "sudo apt-get install unzip",
-      "mkdir webapp",
-      "sudo unzip webapp.zip -d webapp",
-      "cd webapp",
-      "sudo npm i",
     ]
   }
 
