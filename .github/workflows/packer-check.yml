@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Create Application Artifact
+        run: |
+         mkdir artifacts
+         zip -r artifacts/webapp.zip .
 
       - name: Install Packer
         run: |
