@@ -24,7 +24,7 @@ build {
   provisioner "file" {
     source      = "setup.sh"
     destination = "/tmp/setup.sh"
-    
+
   }
 
   // provisioner "shell" {
