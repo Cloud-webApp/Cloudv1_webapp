@@ -20,11 +20,11 @@ jobs:
           unzip packer_${PACKER_VERSION}_linux_amd64.zip
           sudo mv packer /usr/local/bin/
           packer --version
-          
+
       - name: Create Application Artifact
         run: |
          mkdir artifacts
-         zip -r artifacts/webapp.zip
+         zip -r artifacts/webapp.zip .
 
       - name: Initialize Packer
         run: packer init main.pkr.hcl

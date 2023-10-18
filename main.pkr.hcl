@@ -22,15 +22,15 @@ build {
   sources = ["source.amazon-ebs.debian"]
 
   provisioner "file" {
-  source      = "artifacts/webapp.zip"  # Path to your zipped artifact
-  destination = "/tmp/webapp.zip"
-  direction   = "upload"
-}
+    source      = "artifacts/webapp.zip" # Path to your zipped artifact
+    destination = "/tmp/webapp.zip"
+    direction   = "upload"
+  }
 
-provisioner "file" {
-  source      = "setup.sh"
-  destination = "/tmp/setup.sh"
-}
+  provisioner "file" {
+    source      = "setup.sh"
+    destination = "/tmp/setup.sh"
+  }
 
   post-processor "shell-local" {
     inline = [
