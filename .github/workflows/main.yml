@@ -3,7 +3,7 @@ name: NODE  CI
 on:
   pull_request:
     branches:
-      - main # Assuming your primary branch is named 'main'
+      - feature-ami1 # Assuming your primary branch is named 'main'
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
