@@ -14,7 +14,10 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Create zip archive from current directory
-        run: zip -r webapp.zip .
+        run: |
+          mkdir artifacts
+          zip -r artifacts/webapp.zip . -x "*.git*"
+
       - name: Install Packer
         run: |
           PACKER_VERSION="1.9.4"  # specify your desired version

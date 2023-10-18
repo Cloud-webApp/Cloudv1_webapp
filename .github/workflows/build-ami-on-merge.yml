@@ -63,7 +63,9 @@
 
           
         - name: Create zip archive from current directory
-          run: zip -r webapp.zip .
+          run: |
+            mkdir artifacts
+            zip -r artifacts/webapp.zip . -x "*.git*"
 
         - name: Install Packer
           run: |
