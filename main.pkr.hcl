@@ -6,14 +6,28 @@ packer {
     }
   }
 }
+variable "aws_region" {
+  type    = string
+  default = "us-east-1"
+}
+
+variable "source_ami" {
+  type    = string
+  default = "ami-06db4d78cb1d3bbf9"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "admin"
+}
 
 source "amazon-ebs" "debian" {
   ami_name      = "packer-debian-ami-{{timestamp}}" #timestampx    
-  source_ami    = "ami-06db4d78cb1d3bbf9"
+  source_ami    = "${var.source_ami}"
   instance_type = "t2.micro"
-  region        = "us-east-1"
+  region        = "${var.aws_region}"
   profile       = "GitActionUser" # aws cli profile
-  ssh_username  = "admin"
+  ssh_username  = "${var.ssh_username}"
 
   ami_users = ["274348305701", "661783133001"] # acc. id
 }

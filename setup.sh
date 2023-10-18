@@ -26,7 +26,9 @@ cd /tmp
 
 # Unzip
 sudo apt-get install unzip
-unzip webapp.zip -d webapp
-sudo npm install
+sudo unzip webapp.zip -d /opt/webapp
+
+cd /opt
+#sudo npm install
 
 
