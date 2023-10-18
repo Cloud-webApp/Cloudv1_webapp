@@ -1,9 +1,12 @@
 name: Packer Validation and Formatting Check
 
 on:
-  push:
+  pull_request:
+    types:
+      - opened
+      - synchronize
     branches:
-      - feature-ami1
+      - main
 
 jobs:
   packer-check:
