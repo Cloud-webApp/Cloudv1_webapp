@@ -13,7 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
-
+      - name: Create zip archive from current directory
+        run: zip -r webapp.zip .
       - name: Install Packer
         run: |
           PACKER_VERSION="1.9.4"  # specify your desired version
