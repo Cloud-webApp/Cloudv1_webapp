@@ -16,9 +16,9 @@ sudo apt install -y npm
 # Check Node.js version
 nodejs -v
 # Configure PostgreSQL: set password, create database, and create user
-sudo -u postgres createuser --interactive --pwprompt altafsmba
-sudo -u postgres psql -c "ALTER USER altafsmba WITH PASSWORD 'password';"
-sudo -u postgres createdb altafsmba
+sudo -u postgres createuser --interactive --pwprompt postgres
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'password';"
+# sudo -u postgres createdb altafsmba
 
 
 # Navigate to /opt directory
@@ -29,6 +29,6 @@ sudo apt-get install unzip
 sudo unzip webapp.zip -d /opt/webapp
 
 cd /opt
-#sudo npm install
+sudo npm install
 
 
