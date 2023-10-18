@@ -36,7 +36,7 @@ assignmentRouter.use("/", async (req, res, next) => {
 //   }
 // });
 // GET all assignments
-assignmentRouter.get("/", queryParameterValidators, async (req, res) => {
+assignmentRouter.get("/",basicAuthenticator, queryParameterValidators, async (req, res) => {
   if (Object.keys(req.query).length > 0) {
     // If query parameters are present, return a 400 Bad Request
     return res.status(400).json({ errorMessage: "Query parameters are not allowed for this endpoint." });
