@@ -22,14 +22,16 @@ build {
   sources = ["source.amazon-ebs.debian"]
 
   provisioner "file" {
-    source      = "./webapp.zip"
+    source      = "webapp.zip"
     destination = "/tmp/webapp.zip"
+    generated = true
   }
 
-  provisioner "file" {
-    source      = "setup.sh"
-    destination = "/tmp/setup.sh"
+  #create provisioner for inline
+  provisioner "shell" {
+    script = "setup.sh"
   }
+
 
   post-processor "shell-local" {
     inline = [
