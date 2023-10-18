@@ -8,8 +8,58 @@ on:
 jobs:
   build-ami:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{ secrets.DB_DATABASE }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_PORT: ${{ secrets.DB_PORT }}
+          POSTGRES_HOST: ${{ secrets.DB_HOST }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+ 
+
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo PGDATABASE=${{ secrets.DB_DATABASE }} >> .env
+          echo PGUSER=${{ secrets.DB_USER }} >> .env
+          echo PGPASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo PGPORT=${{ secrets.DB_PORT }} >> .env
+          echo PGHOST=${{ secrets.DB_HOST }} >> .env
+          echo "cat .env"
+          cat .env
+          echo "ls -a ."
+          ls -a .
+          echo "ls -a ${{ github.workspace }}"
+          ls -a ${{ github.workspace }}
+
+ 
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+
+ 
+
+      - name: Install Dependencies
+        run: npm install
+
+ 
+
+      - name: Run Integration Tests
+        run: npm run test
+
       - name: Checkout Repository
         uses: actions/checkout@v2
 
