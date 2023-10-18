@@ -36,38 +36,38 @@ build {
   sources = ["source.amazon-ebs.debian"]
 
   provisioner "shell" {
-  inline = [
-    "sudo chmod a+w /home",
-    "sudo chmod -R +rwx /home",
-  ]
-}
+    inline = [
+      "sudo chmod a+w /home",
+      "sudo chmod -R +rwx /home",
+    ]
+  }
 
-provisioner "file" {
-  source      = "setup.sh"
-  destination = "/home/setup.sh"
-}
+  provisioner "file" {
+    source      = "setup.sh"
+    destination = "/home/setup.sh"
+  }
 
-provisioner "file" {
-  direction   = "upload"
-  source      = "./artifacts/webapp.zip"
-  destination = "webapp.zip"
-}
+  provisioner "file" {
+    direction   = "upload"
+    source      = "./artifacts/webapp.zip"
+    destination = "webapp.zip"
+  }
 
-provisioner "shell" {
-  inline = [
-    "sudo apt-get update",
-    "sudo apt-get install -y expect",
-    "sudo apt-get install -y unzip",
-    "sudo chmod +x /home/setup.sh",
-    "sudo /home/setup.sh",
-    "sudo ls",
-    "sudo apt-get install unzip",
-    "mkdir web-app",
-    "sudo unzip webapp.zip -d web-app",
-    "cd web-app",
-    "sudo npm i",
-  ]
-}
+  provisioner "shell" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y expect",
+      "sudo apt-get install -y unzip",
+      "sudo chmod +x /home/setup.sh",
+      "sudo /home/setup.sh",
+      "sudo ls",
+      "sudo apt-get install unzip",
+      "mkdir web-app",
+      "sudo unzip webapp.zip -d web-app",
+      "cd web-app",
+      "sudo npm i",
+    ]
+  }
 
 
   post-processor "shell-local" {
