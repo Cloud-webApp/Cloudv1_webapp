@@ -2,6 +2,9 @@
 # Update and upgrade packages
 sudo apt update
 sudo apt upgrade -y
+
+sudo apt install unzip
+
 # Install PostgreSQL and related packages
 sudo apt install -y postgresql postgresql-contrib
 # Start and enable PostgreSQL service
@@ -16,3 +19,9 @@ nodejs -v
 sudo -u postgres createuser --interactive --pwprompt altafsmba
 sudo -u postgres psql -c "ALTER USER altafsmba WITH PASSWORD 'password';"
 sudo -u postgres createdb altafsmba
+
+
+sudo mkdir webapp
+sudo unzip webapp.zip -d webapp
+cd webapp/ || exit 
+sudo npm install

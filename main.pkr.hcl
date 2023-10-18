@@ -8,11 +8,11 @@ packer {
 }
 
 source "amazon-ebs" "debian" {
-  ami_name      = "packer-debian-ami-{{timestamp}}"
+  ami_name      = "packer-debian-ami-{{timestamp}}" #timestampx    
   source_ami    = "ami-06db4d78cb1d3bbf9"
   instance_type = "t2.micro"
   region        = "us-east-1"
-  profile       = "dev" # aws cli profile
+  profile       = "GitActionUser" # aws cli profile
   ssh_username  = "admin"
 
   ami_users = ["274348305701", "661783133001"] # acc. id
@@ -24,11 +24,21 @@ build {
   provisioner "file" {
     source      = "setup.sh"
     destination = "/tmp/setup.sh"
+    
   }
 
+  // provisioner "shell" {
+  //   inline = [
+  //     "chmod +x /tmp/setup.sh",
+  //     "/tmp/setup.sh",
+  //     "pwd"
+  //   ]
+  // }
   post-processor "shell-local" {
     inline = [
+      "pwd",
       "echo 'build complete !!! ur debian ami is ready'"
+
     ]
   }
 }
