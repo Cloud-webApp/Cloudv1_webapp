@@ -35,9 +35,15 @@ source "amazon-ebs" "debian" {
 build {
   sources = ["source.amazon-ebs.debian"]
 
+  provisioner "shell" {
+    inline = [
+      "sudo chmod a+w /home",
+      "sudo chmod -R +rwx /home",
+    ]
+  }
   provisioner "file" {
     source      = "webapp.zip"
-    destination = "/tmp/webapp.zip"
+    destination = "webapp.zip"
     generated   = true
   }
 
@@ -45,7 +51,21 @@ build {
   provisioner "shell" {
     script = "setup.sh"
   }
-
+  provisioner "shell" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y expect",
+      "sudo apt-get install -y unzip",
+      "sudo chmod +x /home/setup.sh",
+      "sudo /home/setup.sh",
+      "sudo ls",
+      "sudo apt-get install unzip",
+      "mkdir webapp",
+      "sudo unzip webapp.zip -d webapp",
+      "cd webapp",
+      "sudo npm i",
+    ]
+  }
 
   post-processor "shell-local" {
     inline = [
