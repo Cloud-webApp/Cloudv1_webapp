@@ -13,10 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Create Application Artifact
-        run: |
-         mkdir artifacts
-         zip -r artifacts/webapp.zip .
+      - name: Create zip archive from current directory
+        run: zip -r webapp.zip .
 
       - name: Install Packer
         run: |

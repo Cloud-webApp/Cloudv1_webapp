@@ -21,7 +21,12 @@ sudo -u postgres psql -c "ALTER USER altafsmba WITH PASSWORD 'password';"
 sudo -u postgres createdb altafsmba
 
 
-sudo mkdir webapp
-sudo unzip webapp.zip -d webapp
-cd webapp/ || exit 
+# Navigate to /opt directory
+cd /tmp
+
+# Unzip
+sudo apt-get install unzip
+unzip webapp.zip -d webapp
 sudo npm install
+
+

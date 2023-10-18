@@ -22,9 +22,8 @@ build {
   sources = ["source.amazon-ebs.debian"]
 
   provisioner "file" {
-    source      = "artifacts/webapp.zip" # Path to your zipped artifact
+    source      = "./webapp.zip"
     destination = "/tmp/webapp.zip"
-    direction   = "upload"
   }
 
   provisioner "file" {
