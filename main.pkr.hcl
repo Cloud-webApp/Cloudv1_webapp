@@ -6,7 +6,7 @@ packer {
     }
   }
 }
-variable "aws_region"   {
+variable "aws_region" {
   type    = string
   default = "us-east-1"
 }
@@ -23,7 +23,7 @@ variable "ssh_username" {
 
 source "amazon-ebs" "debian" {
   ami_name      = "packer-debian-ami-{{timestamp}}" #timestampx    
-  source_ami    = "${var.source_ami}"
+  source_ami    = "${var.source_amis}"
   instance_type = "t2.micro"
   region        = "${var.aws_region}"
   profile       = "GitActionUser" # aws cli profile
