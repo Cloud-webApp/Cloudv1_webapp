@@ -25,6 +25,7 @@ const sequelize = new Sequelize(
   sequelizeConfig
 );
 
+
 export default sequelize;
 
 
