@@ -69,7 +69,32 @@ build {
       "sudo apt-get remove --purge -y git"
     ]
   }
+  provisioner "shell" {
+    inline = [
+      "touch /home/admin/web-app/.env",
+      "echo 'DB_PORT=5432' >> /home/admin/web-app/.env",
+      "echo 'DB_USER=csye6225' >> /home/admin/web-app/.env",
+      "echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env",
+      "echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env",
+      "echo 'DB_HOST=localhost' >> /home/admin/web-app/.env",
+      "echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env"
+    ]
+  }
 
+  provisioner "file" {
+    source      = "systemd/my-app.service"
+    destination = "/lib/systemd/system/my-app.service"
+  }
+  provisioner "shell" {
+    inline = [
+      //  "sudo groupadd csye6225",
+      // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+      "sudo cp systemd/my-app.service /lib/systemd/system/",
+      "sudo systemctl daemon-reload",
+      "sudo systemctl enable my-app",
+      "sudo systemctl start my-app"
+    ]
+  }
 
   post-processor "shell-local" {
     inline = [
