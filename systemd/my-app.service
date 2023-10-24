@@ -1,16 +1,14 @@
 [Unit]
-Description= Node.js Application
+Description=Your Node.js Application
+After=network.target
 
 [Service]
+EnvironmentFile=/home/admin/web-app/.env
+Type=simple
+User=admin
 ExecStart=/usr/bin/node /home/admin/web-app/app.js
+Restart=on-failure
 WorkingDirectory=/home/admin/web-app
-User=your-username
-Group=your-groupname
-Restart=always
-RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=your-app
 
 [Install]
 WantedBy=multi-user.target
