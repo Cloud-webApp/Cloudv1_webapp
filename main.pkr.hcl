@@ -83,18 +83,18 @@ build {
 
   provisioner "file" {
     source      = "systemd/my-app.service"
-    destination = "/lib/systemd/system/my-app.service"
+    destination = "/tmp/my-app.service"
   }
+
   provisioner "shell" {
     inline = [
-      //  "sudo groupadd csye6225",
-      // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo cp systemd/my-app.service /lib/systemd/system/",
+      "sudo cp /tmp/my-app.service /lib/systemd/system/my-app.service",
       "sudo systemctl daemon-reload",
       "sudo systemctl enable my-app",
       "sudo systemctl start my-app"
     ]
   }
+
 
   post-processor "shell-local" {
     inline = [
