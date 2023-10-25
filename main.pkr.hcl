@@ -59,27 +59,30 @@ build {
       "sudo apt-get install -y expect",
       "sudo apt-get install -y unzip",
       "sudo chmod +x /home/setup.sh",
-      "sudo /home/setup.sh",
+
       "sudo ls",
       "sudo apt-get install unzip",
       "mkdir web-app",
       "sudo unzip webapp.zip -d web-app",
       "cd web-app",
+
+      "sudo /home/setup.sh",
+
       "sudo npm i",
       "sudo apt-get remove --purge -y git"
     ]
   }
-  provisioner "shell" {
-    inline = [
-      "touch /home/admin/web-app/.env",
-      "echo 'DB_PORT=5432' >> /home/admin/web-app/.env",
-      "echo 'DB_USER=csye6225' >> /home/admin/web-app/.env",
-      "echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env",
-      "echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env",
-      "echo 'DB_HOST=localhost' >> /home/admin/web-app/.env",
-      "echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env"
-    ]
-  }
+  // provisioner "shell" {
+  //   inline = [
+  //     "touch /home/admin/web-app/.env",
+  //     "echo 'DB_PORT=5432' >> /home/admin/web-app/.env",
+  //     "echo 'DB_USER=csye6225' >> /home/admin/web-app/.env",
+  //     "echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env",
+  //     "echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env",
+  //     "echo 'DB_HOST=localhost' >> /home/admin/web-app/.env",
+  //     "echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env"
+  //   ]
+  // }
 
   provisioner "file" {
     source      = "systemd/my-app.service"
@@ -87,8 +90,7 @@ build {
   }
   provisioner "shell" {
     inline = [
-      //  "sudo groupadd csye6225",
-      // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+
       "sudo useradd -m webappuser",
       "sudo groupadd webappgroup",
       "sudo usermod -aG webappgroup webappuser",
@@ -103,10 +105,15 @@ build {
       "sudo chown webappuser:webappgroup /var/log/webapp.log",
       "sudo chmod 644 /var/log/webapp.log",
 
+      "sudo chown -R webappuser:webappgroup /home/admin/web-app",
+      "sudo chmod -R 750 /home/admin/web-app",
+
       "sudo cp /tmp/my-app.service /lib/systemd/system/",
       "sudo systemctl daemon-reload",
       "sudo systemctl enable my-app",
       "sudo systemctl start my-app"
+      //  "sudo groupadd csye6225",
+      // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
     ]
   }
   post-processor "shell-local" {
