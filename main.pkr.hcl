@@ -88,30 +88,30 @@ build {
     source      = "systemd/my-app.service"
     destination = "/tmp/my-app.service"
   }
-  provisioner "shell" {
-    inline = [
-      //  "sudo groupadd csye6225",
-      // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo useradd -m webappuser",
-      "sudo groupadd webappgroup",
-      "sudo usermod -aG webappgroup webappuser",
-      "sudo usermod -aG webappgroup admin",
-      "sudo chown -R webappuser:webappgroup /home/webappuser",
-      "sudo chmod -R 750 /home/webappuser",
-      "sudo chown webappuser:webappgroup /home/admin/web-app/app.js",
-      "sudo chmod 750 /home/admin/web-app/app.js",
-      "sudo usermod -aG systemd-journal webappuser",
-      "sudo chmod 644 /home/admin/web-app/.env",
-      "sudo touch /var/log/webapp.log",
-      "sudo chown webappuser:webappgroup /var/log/webapp.log",
-      "sudo chmod 644 /var/log/webapp.log",
+  // provisioner "shell" {
+  //   inline = [
+  //     //  "sudo groupadd csye6225",
+  //     // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+  //     "sudo useradd -m webappuser",
+  //     "sudo groupadd webappgroup",
+  //     "sudo usermod -aG webappgroup webappuser",
+  //     "sudo usermod -aG webappgroup admin",
+  //     "sudo chown -R webappuser:webappgroup /home/webappuser",
+  //     "sudo chmod -R 750 /home/webappuser",
+  //     "sudo chown webappuser:webappgroup /home/admin/web-app/app.js",
+  //     "sudo chmod 750 /home/admin/web-app/app.js",
+  //     "sudo usermod -aG systemd-journal webappuser",
+  //     "sudo chmod 644 /home/admin/web-app/.env",
+  //     "sudo touch /var/log/webapp.log",
+  //     "sudo chown webappuser:webappgroup /var/log/webapp.log",
+  //     "sudo chmod 644 /var/log/webapp.log",
 
-      "sudo cp /tmp/my-app.service /lib/systemd/system/",
-      "sudo systemctl daemon-reload",
-      "sudo systemctl enable my-app",
-      "sudo systemctl start my-app"
-    ]
-  }
+  //     "sudo cp /tmp/my-app.service /lib/systemd/system/",
+  //     "sudo systemctl daemon-reload",
+  //     "sudo systemctl enable my-app",
+  //     "sudo systemctl start my-app"
+  //   ]
+  // }
   post-processor "shell-local" {
     inline = [
       "pwd",
