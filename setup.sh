@@ -3,14 +3,19 @@
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt install unzip
 # Install Node.js and npm
 sudo apt install -y nodejs
 sudo apt install -y npm
 # Check Node.js version
 nodejs -v
 
-
+touch /home/admin/web-app/.env
+echo 'DB_PORT=5432' >> /home/admin/web-app/.env
+echo 'DB_USER=csye6225' >> /home/admin/web-app/.env
+echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env
+echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env
+echo 'DB_HOST=localhost' >> /home/admin/web-app/.env
+echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env
 
 # sudo useradd -m webappuser
 # sudo groupadd webappgroup
