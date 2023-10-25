@@ -4,7 +4,7 @@ import db from './dbSetup.js'; // Import your database setup
 import bcrypt from 'bcryptjs';
 
 const insertDataFromCSV = () => {
-  const filePath = 'users.csv'; // Replace with your CSV file path
+  const filePath = './users.csv'; // Replace with your CSV file path
 
   fs.createReadStream(filePath)
     .pipe(csv())
