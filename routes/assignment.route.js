@@ -71,7 +71,7 @@ assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
     });
 
     if (_.isEmpty(assignmentInfo)) {
-      return res.status(400).send();
+      return res.status(404).send();     //did 400 earlier
     } else {
       res.status(200).json(assignmentInfo);
     }
@@ -114,7 +114,13 @@ assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (
 
   try {
     const newAssignment = await assignmentDb.create(tempAssignment);
-    res.status(201).json(newAssignment);
+
+    // Exclude user_id from the response
+    const responseAssignment = { ...newAssignment.dataValues };
+    delete responseAssignment.user_id;
+
+    //res.status(201).json(responseAssignment);
+    res.status(201).json(responseAssignment);
   } catch (error) {
     console.error(error);
     res.status(500).send(); // Internal Server Error
@@ -131,7 +137,7 @@ assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, as
     });
 
     if (_.isEmpty(assignmentInfo)) {
-      return res.status(400).send();
+      return res.status(404).send();   //updated
     } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
       return res.status(403).json({ error: "Your are not authorized user" });
     }
@@ -172,7 +178,7 @@ if (extraKeys.length > 0) {
     });
 
     if (_.isEmpty(assignmentInfo)) {
-      return res.status(400).send();
+      return res.status(404).send();
     } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
       return res.status(403).json({ error: "Your are not authorized user" });
     }
