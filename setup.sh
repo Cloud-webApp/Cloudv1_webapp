@@ -11,33 +11,29 @@ sudo apt install -y npm
 nodejs -v
 
 
-# # Install PostgreSQL and related packages
-# sudo apt install -y postgresql postgresql-contrib
-# # Start and enable PostgreSQL service
-# sudo systemctl start postgresql
-# sudo systemctl enable postgresql
-# # Install Node.js and npm
-# sudo apt install -y nodejs
-# sudo apt install -y npm
-# # Check Node.js version
-# nodejs -v
-# Configure PostgreSQL: set password, create database, and create user
-# sudo -u postgres createuser --interactive --pwprompt postgres
-
-#sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
-
-# sudo -u postgres createdb altafsmba
-
-
-
-# Navigate to /opt directory
-# cd /tmp
-
-# # Unzip
-# sudo apt-get install unzip
-# sudo unzip webapp.zip -d /opt/webapp
-
-# cd /opt
-# sudo npm install
-
-
+sudo useradd -m webappuser
+sudo groupadd webappgroup
+ 
+# Add webappuser and admin to the webappgroup
+sudo usermod -aG webappgroup webappuser
+sudo usermod -aG webappgroup admin
+ 
+# Set ownership and permissions for webappuser's home directory
+sudo chown -R webappuser:webappgroup /home/webappuser
+sudo chmod -R 750 /home/webappuser
+ 
+# Set ownership and permissions for the app.js file in admin's directory
+sudo chown webappuser:webappgroup /home/admin/web-app/app.js
+sudo chmod 750 /home/admin/web-app/app.js
+ 
+ 
+# Add webappuser to the systemd-journal group
+sudo usermod -aG systemd-journal webappuser
+ 
+# Set the .env file in admin's directory
+sudo chmod 644 /home/admin/web-app/.env
+ 
+# Create the log file and set ownership and permissions
+sudo touch /var/log/webapp.log
+sudo chown webappuser:webappgroup /var/log/webapp.log
+sudo chmod 644 /var/log/webapp.log

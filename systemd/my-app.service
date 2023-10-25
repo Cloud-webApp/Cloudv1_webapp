@@ -6,7 +6,7 @@ Wants=cloud-init.service
 [Service]
 EnvironmentFile=/home/admin/web-app/.env
 Type=simple
-User=admin
+User=webappuser
 ExecStart=/usr/bin/node /home/admin/web-app/app.js
 Restart=on-failure
 WorkingDirectory=/home/admin/web-app
