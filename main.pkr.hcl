@@ -74,7 +74,7 @@ build {
   }
   provisioner "shell" {
     inline = [
-      "touch /opt/csye6225/web-app/.env",
+      "sudo touch /opt/csye6225/web-app/.env",
       "echo 'DB_PORT=5432' >> /opt/csye6225/web-app/.env",
       "echo 'DB_USER=csye6225' >> /opt/csye6225/web-app/.env",
       "echo 'DB_PASSWORD=password' >> /opt/csye6225/web-app/.env",
