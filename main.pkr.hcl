@@ -4,7 +4,7 @@ packer {
       source  = "github.com/hashicorp/amazon"
       version = ">= 1.0.0"
     }
-  }
+  } //altaf
 }
 variable "aws_region" {
   type    = string
@@ -72,18 +72,6 @@ build {
       "sudo apt-get remove --purge -y git"
     ]
   }
-  // provisioner "shell" {
-  //   inline = [
-  //     "touch /home/admin/web-app/.env",
-  //     "echo 'DB_PORT=5432' >> /home/admin/web-app/.env",
-  //     "echo 'DB_USER=csye6225' >> /home/admin/web-app/.env",
-  //     "echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env",
-  //     "echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env",
-  //     "echo 'DB_HOST=localhost' >> /home/admin/web-app/.env",
-  //     "echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env"
-  //   ]
-  // }
-
   provisioner "file" {
     source      = "systemd/my-app.service"
     destination = "/tmp/my-app.service"
@@ -93,18 +81,28 @@ build {
 
       "sudo useradd -m webappuser",
       "sudo groupadd webappgroup",
+
+      //adding webappuser and admin to the webappgroup
       "sudo usermod -aG webappgroup webappuser",
       "sudo usermod -aG webappgroup admin",
+
+      // ownership and permissions for webappuser's home directory
       "sudo chown -R webappuser:webappgroup /home/webappuser",
       "sudo chmod -R 750 /home/webappuser",
+
+      // ownership and permissions for the app.js file in admin's directory
       "sudo chown webappuser:webappgroup /home/admin/web-app/app.js",
       "sudo chmod 750 /home/admin/web-app/app.js",
+      //Add webappuser to the systemd-journal group
       "sudo usermod -aG systemd-journal webappuser",
+      // .env file in admin's directory
       "sudo chmod 644 /home/admin/web-app/.env",
+      //Create the log file and set ownership and permissions
       "sudo touch /var/log/webapp.log",
       "sudo chown webappuser:webappgroup /var/log/webapp.log",
       "sudo chmod 644 /var/log/webapp.log",
 
+      // ownership to webappuser in admin's directory
       "sudo chown -R webappuser:webappgroup /home/admin/web-app",
       "sudo chmod -R 750 /home/admin/web-app",
 

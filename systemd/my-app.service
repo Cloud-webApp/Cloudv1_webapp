@@ -8,7 +8,7 @@ EnvironmentFile=/home/admin/web-app/.env
 Type=simple
 User=webappuser
 ExecStart=/usr/bin/node /home/admin/web-app/app.js
-Restart=on-failure
+Restart=always
 WorkingDirectory=/home/admin/web-app
 
 [Install]
