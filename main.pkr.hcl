@@ -74,13 +74,13 @@ build {
   }
   provisioner "shell" {
     inline = [
-      "touch /home/admin/web-app/.env",
-      "echo 'DB_PORT=5432' >> /home/admin/web-app/.env",
-      "echo 'DB_USER=csye6225' >> /home/admin/web-app/.env",
-      "echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env",
-      "echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env",
-      "echo 'DB_HOST=localhost' >> /home/admin/web-app/.env",
-      "echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env"
+      "touch /opt/csye6225/web-app/.env",
+      "echo 'DB_PORT=5432' >> /opt/csye6225/web-app/.env",
+      "echo 'DB_USER=csye6225' >> /opt/csye6225/web-app/.env",
+      "echo 'DB_PASSWORD=password' >> /opt/csye6225/web-app/.env",
+      "echo 'DB_DATABASE=csye6225' >> /opt/csye6225/web-app/.env",
+      "echo 'DB_HOST=localhost' >> /opt/csye6225/web-app/.env",
+      "echo 'CSVPATH=./users.csv' >> /opt/csye6225/web-app/.env"
     ]
   }
 
