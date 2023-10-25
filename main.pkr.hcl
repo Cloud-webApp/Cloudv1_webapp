@@ -83,7 +83,7 @@ build {
 
   provisioner "file" {
     source      = "systemd/my-app.service"
-    destination = "/lib/systemd/system/my-app.service"
+    destination = "/tmp/my-app.service"
   }
   provisioner "shell" {
     inline = [
@@ -102,14 +102,13 @@ build {
       "sudo touch /var/log/webapp.log",
       "sudo chown webappuser:webappgroup /var/log/webapp.log",
       "sudo chmod 644 /var/log/webapp.log",
-      //
-      "sudo cp systemd/my-app.service /lib/systemd/system/",
+
+      "sudo cp /tmp/my-app.service /lib/systemd/system/",
       "sudo systemctl daemon-reload",
       "sudo systemctl enable my-app",
       "sudo systemctl start my-app"
     ]
   }
-
   post-processor "shell-local" {
     inline = [
       "pwd",
