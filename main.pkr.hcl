@@ -39,6 +39,8 @@ build {
     inline = [
       "sudo chmod a+w /home",
       "sudo chmod -R +rwx /home",
+      "sudo groupadd csye6225",
+      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
     ]
   }
 
@@ -50,7 +52,7 @@ build {
   provisioner "file" {
     direction   = "upload"
     source      = "./artifacts/webapp.zip"
-    destination = "webapp.zip"
+    destination = "/tmp/webapp.zip"
   }
 
   provisioner "shell" {
@@ -61,12 +63,13 @@ build {
       "sudo chmod +x /home/setup.sh",
       "sudo /home/setup.sh",
       "sudo ls",
-      "sudo apt-get install unzip",
-      "mkdir web-app",
-      "sudo unzip webapp.zip -d web-app",
-      "cd web-app",
+      "sudo mkdir /opt/csye6225/web-app",
+      "sudo unzip /tmp/webapp.zip -d /opt/csye6225/web-app",
+      "sudo cp /opt/csye6225/web-app/systemd/webapp.service /etc/systemd/system/webapp.service",
+      "cd /opt/csye6225/web-app",
       "sudo npm i",
-      "sudo apt-get remove --purge -y git"
+      "sudo apt-get remove --purge -y git",
+      "sudo rm -rf /home/admin/webapp.zip",
     ]
   }
   provisioner "shell" {
