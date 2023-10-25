@@ -41,8 +41,6 @@ build {
       "sudo chmod -R +rwx /home",
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo chown -R webappuser:webappgroup /opt/csye6225/web-app",
-      "sudo chmod -R 750 /opt/csye6225/web-app",
     ]
   }
 
@@ -74,22 +72,22 @@ build {
       "sudo rm -rf /home/admin/webapp.zip",
     ]
   }
-  provisioner "shell" {
-    inline = [
-      "sudo touch /opt/csye6225/web-app/.env",
-      "echo 'DB_PORT=5432' >> /opt/csye6225/web-app/.env",
-      "echo 'DB_USER=csye6225' >> /opt/csye6225/web-app/.env",
-      "echo 'DB_PASSWORD=password' >> /opt/csye6225/web-app/.env",
-      "echo 'DB_DATABASE=csye6225' >> /opt/csye6225/web-app/.env",
-      "echo 'DB_HOST=localhost' >> /opt/csye6225/web-app/.env",
-      "echo 'CSVPATH=./users.csv' >> /opt/csye6225/web-app/.env"
-    ]
-  }
+  // provisioner "shell" {
+  //   inline = [
+  //     "sudo touch /opt/csye6225/web-app/.env",
+  //     "echo 'DB_PORT=5432' >> /opt/csye6225/web-app/.env",
+  //     "echo 'DB_USER=csye6225' >> /opt/csye6225/web-app/.env",
+  //     "echo 'DB_PASSWORD=password' >> /opt/csye6225/web-app/.env",
+  //     "echo 'DB_DATABASE=csye6225' >> /opt/csye6225/web-app/.env",
+  //     "echo 'DB_HOST=localhost' >> /opt/csye6225/web-app/.env",
+  //     "echo 'CSVPATH=./users.csv' >> /opt/csye6225/web-app/.env"
+  //   ]
+  // }
 
-  provisioner "file" {
-    source      = "systemd/my-app.service"
-    destination = "/tmp/my-app.service"
-  }
+  // provisioner "file" {
+  //   source      = "systemd/my-app.service"
+  //   destination = "/tmp/my-app.service"
+  // }
   // provisioner "shell" {
   //   inline = [
   //     //  "sudo groupadd csye6225",
