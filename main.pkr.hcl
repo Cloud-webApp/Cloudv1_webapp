@@ -110,6 +110,7 @@ build {
       "sudo systemctl daemon-reload",
       "sudo systemctl enable my-app",
       "sudo systemctl start my-app"
+      
       //  "sudo groupadd csye6225",
       // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
     ]
