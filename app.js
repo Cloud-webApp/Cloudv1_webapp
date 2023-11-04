@@ -2,6 +2,8 @@ import express from 'express';
 import appRoute from './routes/app.route.js';
 import assignmentRoute from './routes/assignment.route.js';
 
+import logger from './config/logger.config.js';
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -17,6 +19,7 @@ app.use("/", (req, res) => {
 
 // Express server
 app.listen(PORT, (err) => {
+  logger.info("logs from app.js");
   if (err) {
     console.log("Failed to start the application");
   } else {

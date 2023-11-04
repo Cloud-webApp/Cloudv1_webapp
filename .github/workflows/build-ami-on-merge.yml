@@ -15,6 +15,13 @@ jobs:
 
       - name: Create zip archive from the current directory
         run: |
+          touch .env
+          echo 'DB_PORT=${{ secrets.DB_PORT }}' >> .env
+          echo 'DB_USER=${{ secrets.DB_USER }}' >> .env
+          echo 'DB_PASSWORD=${{ secrets.DB_PASSWORD }}' >> .env
+          echo 'DB_DATABASE=${{ secrets.DB_DATABASE }}' >> .env
+          echo 'DB_HOST=${{ secrets.DB_HOST }}' >> .env
+          echo 'CSVPATH=./users.csv' >> .env
           mkdir artifacts
           zip -r artifacts/webapp.zip . -x "*.git*"
 

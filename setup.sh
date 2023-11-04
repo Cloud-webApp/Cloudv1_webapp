@@ -7,15 +7,40 @@ sudo apt upgrade -y
 sudo apt install -y nodejs
 sudo apt install -y npm
 # Check Node.js version
+
 nodejs -v
 
-touch /home/admin/web-app/.env
-echo 'DB_PORT=5432' >> /home/admin/web-app/.env
-echo 'DB_USER=csye6225' >> /home/admin/web-app/.env
-echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env
-echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env
-echo 'DB_HOST=localhost' >> /home/admin/web-app/.env
-echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env
+
+echo 'Downloading the CloudWatch Agent package...'
+sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb
+ 
+echo 'Installing the CloudWatch Agent package...'
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+ 
+echo 'Enabling the CloudWatch Agent service...'
+sudo systemctl enable amazon-cloudwatch-agent
+sudo systemctl start amazon-cloudwatch-agent
+ 
+rm ./amazon-cloudwatch-agent.deb
+
+
+
+# touch /home/admin/web-app/.env
+# echo 'DB_PORT=5432' >> /home/admin/web-app/.env
+# echo 'DB_USER=csye6225' >> /home/admin/web-app/.env
+# echo 'DB_PASSWORD=password' >> /home/admin/web-app/.env
+# echo 'DB_DATABASE=csye6225' >> /home/admin/web-app/.env
+# echo 'DB_HOST=localhost' >> /home/admin/web-app/.env
+# echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env
+
+
+# echo 'DB_PORT=${{ secrets.DB_PORT }}' >> /home/admin/web-app/.env
+# echo 'DB_USER=${{ secrets.DB_USER }}' >> /home/admin/web-app/.env
+# echo 'DB_PASSWORD=${{ secrets.DB_PASSWORD }}' >> /home/admin/web-app/.env
+# echo 'DB_DATABASE=${{ secrets.DB_DATABASE }}' >> /home/admin/web-app/.env
+# echo 'DB_HOST=${{ secrets.DB_HOST }}' >> /home/admin/web-app/.env
+# echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env
+
 
 # sudo useradd -m webappuser
 # sudo groupadd webappgroup
