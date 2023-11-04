@@ -42,29 +42,29 @@ rm ./amazon-cloudwatch-agent.deb
 # echo 'CSVPATH=./users.csv' >> /home/admin/web-app/.env
 
 
-# sudo useradd -m webappuser
+# sudo useradd -m csye6225
 # sudo groupadd webappgroup
  
-# # Add webappuser and admin to the webappgroup
-# sudo usermod -aG webappgroup webappuser
+# # Add csye6225 and admin to the webappgroup
+# sudo usermod -aG webappgroup csye6225
 # sudo usermod -aG webappgroup admin
  
-# # Set ownership and permissions for webappuser's home directory
-# sudo chown -R webappuser:webappgroup /home/webappuser
-# sudo chmod -R 750 /home/webappuser
+# # Set ownership and permissions for csye6225's home directory
+# sudo chown -R csye6225:webappgroup /home/csye6225
+# sudo chmod -R 750 /home/csye6225
  
 # # Set ownership and permissions for the app.js file in admin's directory
-# sudo chown webappuser:webappgroup /home/admin/web-app/app.js
+# sudo chown csye6225:webappgroup /home/admin/web-app/app.js
 # sudo chmod 750 /home/admin/web-app/app.js
  
  
-# # Add webappuser to the systemd-journal group
-# sudo usermod -aG systemd-journal webappuser
+# # Add csye6225 to the systemd-journal group
+# sudo usermod -aG systemd-journal csye6225
  
 # # Set the .env file in admin's directory
 # sudo chmod 644 /home/admin/web-app/.env
  
 # # Create the log file and set ownership and permissions
 # sudo touch /var/log/webapp.log
-# sudo chown webappuser:webappgroup /var/log/webapp.log
+# sudo chown csye6225:webappgroup /var/log/webapp.log
 # sudo chmod 644 /var/log/webapp.log
