@@ -79,31 +79,31 @@ build {
   provisioner "shell" {
     inline = [
 
-      "sudo useradd -m webappuser",
-      "sudo groupadd webappuser",
+      "sudo useradd -m csye6225",
+      "sudo groupadd csye6225",
 
-      //adding webappuser and admin to the webappuser
-      "sudo usermod -aG webappuser webappuser",
-      "sudo usermod -aG webappuser admin",
+      //adding csye6225 and admin to the csye6225
+      "sudo usermod -aG csye6225 csye6225",
+      "sudo usermod -aG csye6225 admin",
 
-      // ownership and permissions for webappuser's home directory
-      "sudo chown -R webappuser:webappuser /home/webappuser",
-      "sudo chmod -R 750 /home/webappuser",
+      // ownership and permissions for csye6225's home directory
+      "sudo chown -R csye6225:csye6225 /home/csye6225",
+      "sudo chmod -R 750 /home/csye6225",
 
       // ownership and permissions for the app.js file in admin's directory
-      "sudo chown webappuser:webappuser /home/admin/web-app/app.js",
+      "sudo chown csye6225:csye6225 /home/admin/web-app/app.js",
       "sudo chmod 750 /home/admin/web-app/app.js",
-      //Add webappuser to the systemd-journal group
-      "sudo usermod -aG systemd-journal webappuser",
+      //Add csye6225 to the systemd-journal group
+      "sudo usermod -aG systemd-journal csye6225",
       // .env file in admin's directory
       "sudo chmod 644 /home/admin/web-app/.env",
       //Create the log file and set ownership and permissions
       "sudo touch /var/log/webapp.log",
-      "sudo chown webappuser:webappuser /var/log/webapp.log",
+      "sudo chown csye6225:csye6225 /var/log/webapp.log",
       "sudo chmod 644 /var/log/webapp.log",
 
-      // ownership to webappuser in admin's directory
-      "sudo chown -R webappuser:webappuser /home/admin/web-app",
+      // ownership to csye6225 in admin's directory
+      "sudo chown -R csye6225:csye6225 /home/admin/web-app",
       "sudo chmod -R 750 /home/admin/web-app",
 
       "sudo cp /tmp/my-app.service /lib/systemd/system/",
