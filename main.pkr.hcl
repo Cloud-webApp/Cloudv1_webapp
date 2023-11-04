@@ -79,31 +79,27 @@ build {
   provisioner "shell" {
     inline = [
 
-      "sudo useradd -m csye6225",
-      "sudo groupadd csye6225",
+      "sudo useradd -m webappuser",
+      "sudo groupadd webappgroup",
 
-      //adding csye6225 and admin to the csye6225
-      "sudo usermod -aG csye6225 csye6225",
-      "sudo usermod -aG csye6225 admin",
+      //adding webappuser and admin to the webappgroup
+      "sudo usermod -aG webappgroup webappuser",
+      "sudo usermod -aG webappgroup admin",
 
-      // ownership and permissions for csye6225's home directory
-      "sudo chown -R csye6225:csye6225 /home/csye6225",
-      "sudo chmod -R 750 /home/csye6225",
+      // ownership and permissions for webappuser's home directory
+      "sudo chown -R webappuser:webappgroup /home/webappuser",
+      "sudo chmod -R 750 /home/webappuser",
 
       // ownership and permissions for the app.js file in admin's directory
-      "sudo chown csye6225:csye6225 /home/admin/web-app/app.js",
+      "sudo chown webappuser:webappgroup /home/admin/web-app/app.js",
       "sudo chmod 750 /home/admin/web-app/app.js",
-      //Add csye6225 to the systemd-journal group
-      "sudo usermod -aG systemd-journal csye6225",
+      //Add webappuser to the systemd-journal group
+      "sudo usermod -aG systemd-journal webappuser",
       // .env file in admin's directory
       "sudo chmod 644 /home/admin/web-app/.env",
-      //Create the log file and set ownership and permissions
-      "sudo touch /var/log/webapp.log",
-      "sudo chown csye6225:csye6225 /var/log/webapp.log",
-      "sudo chmod 644 /var/log/webapp.log",
 
-      // ownership to csye6225 in admin's directory
-      "sudo chown -R csye6225:csye6225 /home/admin/web-app",
+      // ownership to webappuser in admin's directory
+      "sudo chown -R webappuser:webappgroup /home/admin/web-app",
       "sudo chmod -R 750 /home/admin/web-app",
 
       "sudo cp /tmp/my-app.service /lib/systemd/system/",
@@ -112,6 +108,12 @@ build {
       "sudo systemctl start my-app"
       //  "sudo groupadd csye6225",
       // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+
+      //log file ownership and permissions
+      // "sudo touch /var/log/webapp.log",
+      // "sudo chown webappuser:webappgroup /var/log/webapp.log",
+      // "sudo chmod 644 /var/log/webapp.log",
+
     ]
   }
   post-processor "shell-local" {
