@@ -4,12 +4,12 @@ After=network.target cloud-init.service
 Wants=cloud-init.service
 
 [Service]
-EnvironmentFile=/home/admin/web-app/.env
+EnvironmentFile=/opt/csye6225/.env
 Type=simple
-User=webappuser
-ExecStart=/usr/bin/node /home/admin/web-app/app.js
+User=csye6225
+ExecStart=/usr/bin/node /opt/csye6225/web-app/app.js
 Restart=always
-WorkingDirectory=/home/admin/web-app
+WorkingDirectory=/opt/csye6225/web-app
 
 [Install]
 WantedBy=cloud-init.target
