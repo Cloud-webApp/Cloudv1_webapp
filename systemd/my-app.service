@@ -7,9 +7,9 @@ Wants=cloud-init.service
 EnvironmentFile=/opt/csye6225/.env
 Type=simple
 User=csye6225
-ExecStart=/usr/bin/node /opt/csye6225/web-app/app.js
+ExecStart=/usr/bin/node /opt/csye6225/app.js
 Restart=always
-WorkingDirectory=/opt/csye6225/web-app
+WorkingDirectory=/opt/csye6225/
 
 [Install]
 WantedBy=cloud-init.target
