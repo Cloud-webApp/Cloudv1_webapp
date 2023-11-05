@@ -105,7 +105,17 @@ build {
       "sudo cp /tmp/my-app.service /lib/systemd/system/",
       "sudo systemctl daemon-reload",
       "sudo systemctl enable my-app",
-      "sudo systemctl start my-app"
+      "sudo systemctl start my-app",
+
+
+      "echo 'Downloading the CloudWatch Agent package...'",
+      "sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb",
+      "echo 'Installing the CloudWatch Agent package...'",
+      "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+      "echo 'Enabling the CloudWatch Agent service...'",
+      "sudo systemctl enable amazon-cloudwatch-agent",
+      "sudo systemctl start amazon-cloudwatch-agent",
+      "rm ./amazon-cloudwatch-agent.deb"
       //  "sudo groupadd csye6225",
       // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
 
