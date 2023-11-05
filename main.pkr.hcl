@@ -52,11 +52,20 @@ build {
     source      = "systemd/my-app.service"
     destination = "/tmp/my-app.service"
   }
-
   provisioner "file" {
     source      = "setup.sh"
-    destination = "/home/setup.sh"
+    destination = "/tmp/setup.sh"
   }
+
+  provisioner "shell" {
+    inline = [
+      "sudo chmod a+w /home",
+      "sudo chmod -R +rwx /home",
+      "chmod +x /tmp/setup.sh", # Make the script executable
+      "/tmp/setup.sh",          # Execute the script
+    ]
+  }
+
 
   // provisioner "shell" {
   //   inline = [
