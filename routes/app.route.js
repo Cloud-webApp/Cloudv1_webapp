@@ -1,7 +1,12 @@
 import sequelize from "../sequelize.js";
 
+import StatsD from 'node-statsd';
+const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
+
+
 // check the health of the application
 const checkHealth = async (req, res) => {
+  statsd.increment('endpoint.health')
   if (req.method === 'GET' && (req.headers['content-length'] > 0 || Object.keys(req.query).length > 0)) {
     // GET request with payload in either body or query parameters
     res.status(400).json({ errorMessage: "Payload in query parameters is not allowed." });
