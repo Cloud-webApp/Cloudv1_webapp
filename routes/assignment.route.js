@@ -5,6 +5,11 @@ import _ from "lodash";
 import assignmentValidator from "../validators/assignment.validator.js";
 import queryParameterValidators from "../validators/queryParameterValidators.js";
 
+
+import StatsD from 'node-statsd';
+const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
+
+
 const assignmentRouter = Router();
 const assignmentDb = db.assignments;
 
@@ -37,6 +42,8 @@ assignmentRouter.use("/", async (req, res, next) => {
 // });
 // GET all assignments
 assignmentRouter.get("/",basicAuthenticator, queryParameterValidators, async (req, res) => {
+  statsd.increment('endpoint.assignment.getall');
+
   if (Object.keys(req.query).length > 0) {
     // If query parameters are present, return a 400 Bad Request
     return res.status(400).json({ errorMessage: "Query parameters are not allowed for this endpoint." });
@@ -62,6 +69,8 @@ assignmentRouter.get("/",basicAuthenticator, queryParameterValidators, async (re
 
 // GET assignment by ID
 assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
+  
+  statsd.increment('endpoint.assignment.getbyid');
   const { id: assignmentId } = req.params;
 
   try {
@@ -83,6 +92,8 @@ assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
 
 // POST a new assignment
 assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (req, res) => {
+  statsd.increment('endpoint.assignment.post');
+
   const expectedKeys = ["name", "points", "num_of_attemps", "deadline"];
 
   // Check for extra keys in the request body
@@ -129,6 +140,7 @@ assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (
 
 // DELETE an assignment by ID
 assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, async (req, res) => {
+  statsd.increment('endpoint.assignment.delete');
   const { id: assignmentId } = req.params;
 
   try {
@@ -153,6 +165,7 @@ assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, as
 
 // PUT (update) an assignment by ID
 assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
+  statsd.increment('endpoint.assignment.put');
   const { id: assignmentId } = req.params;
 
   const { isError: isNotValid, errorMessage } = assignmentValidator.validateUpdateRequest(req);

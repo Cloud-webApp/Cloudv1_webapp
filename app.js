@@ -4,6 +4,10 @@ import assignmentRoute from './routes/assignment.route.js';
 
 import logger from './config/logger.config.js';
 
+import StatsD from 'node-statsd';
+
+const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -26,6 +30,9 @@ app.listen(PORT, (err) => {
     console.log("Application running on port number", PORT);
   }
 });
+
+
+statsd.increment('app.start');
 
 // // Middleware for /healthz only
 // app.use("/healthz", (req, res, next) => {
