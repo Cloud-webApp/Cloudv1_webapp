@@ -96,7 +96,6 @@ build {
     inline = [
       "pwd",
       "echo 'build complete !!! ur debian ami is ready'"
-
     ]
   }
 }
