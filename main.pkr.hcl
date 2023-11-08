@@ -21,15 +21,47 @@ variable "ssh_username" {
   default = "admin"
 }
 
+
+variable "profile" {
+  type    = string
+  default = "GitActionUser"
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
+variable "ami_name_prefix" {
+  type    = string
+  default = "packer-debian-ami"
+}
+
+variable "dev_id" {
+  type        = string
+  description = "AWS dev account ID"
+  default     = "274348305701"
+}
+
+variable "prod_id" {
+  type        = string
+  description = "AWS prod account ID"
+  default     = "661783133001"
+}
+
+
 source "amazon-ebs" "debian" {
-  ami_name      = "packer-debian-ami-{{timestamp}}" #timestampx    
+  ami_name      = "${var.ami_name_prefix}-{{timestamp}}"
   source_ami    = "${var.source_ami}"
-  instance_type = "t2.micro"
+  instance_type = "${var.instance_type}"
   region        = "${var.aws_region}"
-  profile       = "GitActionUser" # aws cli profile
+  profile       = "${var.profile}"
   ssh_username  = "${var.ssh_username}"
 
-  ami_users = ["274348305701", "661783133001"] # acc. id
+  ami_users = [
+    "${var.dev_id}",  # dev account ID
+    "${var.prod_id}", # prod account ID
+  ]
 }
 
 build {
