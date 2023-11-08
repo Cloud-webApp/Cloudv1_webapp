@@ -35,12 +35,6 @@ source "amazon-ebs" "debian" {
 build {
   sources = ["source.amazon-ebs.debian"]
 
-  // provisioner "shell" {
-  //   inline = [
-  //     "sudo chmod a+w /home",
-  //     "sudo chmod -R +rwx /home",
-  //   ]
-  // }
 
   provisioner "file" {
     direction   = "upload"
@@ -61,82 +55,11 @@ build {
     inline = [
       "sudo chmod a+w /home",
       "sudo chmod -R +rwx /home",
-      "chmod +x /tmp/setup.sh", # Make the script executable
-      "/tmp/setup.sh",          # Execute the script
+      "chmod +x /tmp/setup.sh",
+      "/tmp/setup.sh",
     ]
   }
 
-
-  // provisioner "shell" {
-  //   inline = [
-  //     "sudo apt-get update",
-  //     "sudo apt-get install -y expect",
-  //     "sudo apt-get install -y unzip",
-  //     "sudo chmod +x /home/setup.sh",
-
-  //     "sudo ls",
-  //     "sudo apt-get install unzip",
-  //     "mkdir web-app",
-  //     "sudo unzip webapp.zip -d web-app",
-  //     "cd web-app",
-
-  //     "sudo /home/setup.sh",
-
-  //     "sudo npm i",
-  //     "sudo apt-get remove --purge -y git"
-  //   ]
-  // }
-
-  // provisioner "shell" {
-  //   inline = [
-
-  //     "sudo useradd -m webappuser",
-  //     "sudo groupadd webappgroup",
-
-  //     //adding webappuser and admin to the webappgroup
-  //     "sudo usermod -aG webappgroup webappuser",
-  //     "sudo usermod -aG webappgroup admin",
-
-  //     // ownership and permissions for webappuser's home directory
-  //     "sudo chown -R webappuser:webappgroup /home/webappuser",
-  //     "sudo chmod -R 750 /home/webappuser",
-
-  //     // ownership and permissions for the app.js file in admin's directory
-  //     "sudo chown webappuser:webappgroup /home/admin/web-app/app.js",
-  //     "sudo chmod 750 /home/admin/web-app/app.js",
-  //     //Add webappuser to the systemd-journal group
-  //     "sudo usermod -aG systemd-journal webappuser",
-  //     // .env file in admin's directory
-  //     "sudo chmod 644 /home/admin/web-app/.env",
-
-  //     // ownership to webappuser in admin's directory
-  //     "sudo chown -R webappuser:webappgroup /home/admin/web-app",
-  //     "sudo chmod -R 750 /home/admin/web-app",
-
-  //     "sudo cp /tmp/my-app.service /lib/systemd/system/",
-  //     "sudo systemctl daemon-reload",
-  //     "sudo systemctl enable my-app",
-  //     "sudo systemctl start my-app",
-
-
-  //     "echo 'Downloading the CloudWatch Agent package...'",
-  //     "sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb",
-  //     "echo 'Installing the CloudWatch Agent package...'",
-  //     "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
-  //     "echo 'Enabling the CloudWatch Agent service...'",
-  //     "sudo systemctl enable amazon-cloudwatch-agent",
-  //     "sudo systemctl start amazon-cloudwatch-agent",
-  //     "rm ./amazon-cloudwatch-agent.deb"
-  //     //  "sudo groupadd csye6225",
-  //     // "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-
-  //     //log file ownership and permissions
-  //     // "sudo touch /var/log/webapp.log",
-  //     // "sudo chown webappuser:webappgroup /var/log/webapp.log",
-  //     // "sudo chmod 644 /var/log/webapp.log",
-
-  //   ]
-  // }
   post-processor "shell-local" {
     inline = [
       "pwd",
