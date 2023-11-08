@@ -4,9 +4,10 @@ import basicAuthenticator from "../middleware/basicAuthenticator.js";
 import _ from "lodash";
 import assignmentValidator from "../validators/assignment.validator.js";
 import queryParameterValidators from "../validators/queryParameterValidators.js";
-
+import logger from './config/logger.config.js';
 
 import StatsD from 'node-statsd';
+import { log } from "winston";
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
 
 
@@ -22,12 +23,13 @@ assignmentRouter.use("/", async (req, res, next) => {
     req.method !== "DELETE" &&
     req.method !== "PUT"
   ) {
+    logger.warn('405 checker- method not allowed bro');
     return res.status(405).send(); // Method Not Allowed
   }
   next();
 });
 
-// GET all assignments
+// GET all assignments----------------------------------------------------------------------------------
 // assignmentRouter.get("/", queryParameterValidators, async (req, res) => {
 //   try {
 //     const assignmentList = await assignmentDb.findAll({
@@ -58,7 +60,7 @@ assignmentRouter.get("/",basicAuthenticator, queryParameterValidators, async (re
     const assignmentList = await assignmentDb.findAll({
       attributes: { exclude: ["user_id"] },
     });
-
+    logger.info('logs from assignment.route.js List-',assignmentList);
     res.status(200).json(assignmentList);
   } catch (error) {
     console.error(error);
@@ -66,8 +68,7 @@ assignmentRouter.get("/",basicAuthenticator, queryParameterValidators, async (re
   }
 });
 
-
-// GET assignment by ID
+// GET assignment by ID----------------------------------------------------------------------------------
 assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
   
   statsd.increment('endpoint.assignment.getbyid');
@@ -80,17 +81,20 @@ assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
     });
 
     if (_.isEmpty(assignmentInfo)) {
+      logger.error('404 error Assignment not found of id: ',assignmentId);
       return res.status(404).send();     //did 400 earlier
     } else {
+      logger.info('logs from assignment.route.js Info-',assignmentInfo);
       res.status(200).json(assignmentInfo);
     }
   } catch (error) {
     console.error(error);
+    logger.error('500 error Internal Server Error');
     res.status(500).send(); // Internal Server Error
   }
 });
 
-// POST a new assignment
+// POST a new assignment ----------------------------------------------------------------------------------
 assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (req, res) => {
   statsd.increment('endpoint.assignment.post');
 
@@ -102,6 +106,7 @@ assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (
   );
 
   if (extraKeys.length > 0) {
+    logger.error('400 error Invalid keys in the request: ',extraKeys);
     return res.status(400).json({
       errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
     });
@@ -112,6 +117,7 @@ assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (
   const { isError: isNotValid, errorMessage } = assignmentValidator.validatePostRequest(req);
 
   if (isNotValid) {
+    logger.error('400 error Invalid keys in the request: ',errorMessage);
     return res.status(400).json({ errorMessage });
   }
 
@@ -125,7 +131,7 @@ assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (
 
   try {
     const newAssignment = await assignmentDb.create(tempAssignment);
-
+    logger.info('logs from assignment.route.js NEWAssignment-',newAssignment);
     // Exclude user_id from the response
     const responseAssignment = { ...newAssignment.dataValues };
     delete responseAssignment.user_id;
@@ -138,7 +144,7 @@ assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (
   }
 });
 
-// DELETE an assignment by ID
+// DELETE an assignment by ID----------------------------------------------------------------------------------
 assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, async (req, res) => {
   statsd.increment('endpoint.assignment.delete');
   const { id: assignmentId } = req.params;
@@ -149,21 +155,24 @@ assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, as
     });
 
     if (_.isEmpty(assignmentInfo)) {
+      logger.error('404 error Assignment not found of id: ',assignmentId);
       return res.status(404).send();   //updated
     } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
+      logger.error('403 error Your are not authorized user');
       return res.status(403).json({ error: "Your are not authorized user" });
     }
 
     await db.assignments.destroy({ where: { assignment_id: assignmentId } });
-
+    logger.info('logs from assignment.route.js Assignment deleted of id: ',assignmentId);
     res.status(204).json();
   } catch (error) {
+    logger.error('500 error Internal Server Error');
     console.error(error);
     res.status(500).send(); // Internal Server Error
   }
 });
 
-// PUT (update) an assignment by ID
+// PUT (update) an assignment by ID----------------------------------------------------------------------------------
 assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
   statsd.increment('endpoint.assignment.put');
   const { id: assignmentId } = req.params;
@@ -171,6 +180,7 @@ assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
   const { isError: isNotValid, errorMessage } = assignmentValidator.validateUpdateRequest(req);
 
   if (isNotValid) {
+    logger.error('400 error Invalid keys in the request: ',errorMessage);
     return res.status(400).json({ errorMessage });
   }
  // Check for extra keys in the request body
@@ -181,6 +191,7 @@ assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
 );
 
 if (extraKeys.length > 0) {
+  logger.error('400 error Invalid keys in the request: ',extraKeys);
   return res.status(400).json({
     errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
   });
@@ -191,8 +202,10 @@ if (extraKeys.length > 0) {
     });
 
     if (_.isEmpty(assignmentInfo)) {
+      logger.error('404 error Assignment not found of id: ',assignmentId);
       return res.status(404).send();
     } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
+      logger.warn('403 error Your are not authorized user');
       return res.status(403).json({ error: "Your are not authorized user" });
     }
 
@@ -206,9 +219,10 @@ if (extraKeys.length > 0) {
     updatedAssignment = appendDataToObject(updatedAssignment, "deadline", deadline);
 
     await db.assignments.update(updatedAssignment, { where: { assignment_id: assignmentId } });
-
+    logger.info('logs from assignment.route.js Assignment SUCCESS updated of id: ',assignmentId);
     res.status(204).end(); // Success, no content
   } catch (error) {
+    logger.error('500 error Internal Server Error');
     console.error(error);
     res.status(500).send(); // Internal Server Error
   }

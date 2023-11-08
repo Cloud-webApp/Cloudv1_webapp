@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import db from '../dbSetup.js';
 import bcrypt from 'bcryptjs';
+import logger from './config/logger.config.js';
 
 export default async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,6 +10,7 @@ export default async (req, res, next) => {
   if (_.isEmpty(authHeader)) {
     // Authentication header is missing
     res.setHeader('WWW-Authenticate', 'Basic');
+    logger.warn('You are not authorized');
     return res.status(403).json({ error: 'You are not an authorized user' });
   }
 
@@ -26,8 +28,9 @@ export default async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, authUser.password);
 
     if (!isMatch) {
-      // Password does not match
+      // Password does not match   
       res.setHeader('WWW-Authenticate', 'Basic');
+      logger.warn('You are not authorized bruh');
       return res.status(401).json({ error: 'Authentication failed. Invalid password.' });
     }
 
@@ -37,6 +40,7 @@ export default async (req, res, next) => {
   } else {
     // Authentication header is missing or invalid
     res.setHeader('WWW-Authenticate', 'Basic');
+    logger.warn('You are not authorized bruh!!');
     return res.status(403).json({ error: 'You are not an authorized user' });
   }
 

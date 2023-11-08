@@ -2,6 +2,9 @@ import fs from 'fs';
 import csv from 'csv-parser';
 import db from './dbSetup.js'; // Import your database setup
 import bcrypt from 'bcryptjs';
+import logger from './config/logger.config.js';
+
+
 
 const insertDataFromCSV = () => {
   const filePath = './users.csv'; // Replace with your CSV file path
@@ -24,16 +27,20 @@ const insertDataFromCSV = () => {
             email: row.email,
             password: hashedPassword,
           });
+          logger.info(`Inserted: ${row.first_name} ${row.last_name}`);
           console.log(`Inserted: ${row.first_name} ${row.last_name}`);
         } else {
-          console.log(`Skipped: User with email ${row.email} already exists.`);
+          console.log(`!!Skipped: User with email ${row.email} already exists.`);
+          console.log(`!!Skipped: User with email ${row.email} already exists.`);
         }
       } catch (error) {
-        console.error('Error inserting data:', error);
+        logger.error('!!Error inserting data:', error);
+        console.error('!!Error inserting data:', error);
       }
     })
     .on('end', () => {
-      console.log('CSV import complete.');
+      logger.info('!!!CSV import complete.');
+      console.log('!!CSV import complete.');
     });
 };
 
