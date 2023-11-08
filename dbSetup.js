@@ -3,16 +3,18 @@ import sequelize from "./sequelize.js";
 import { Sequelize, DataTypes } from "sequelize";
 import insertDataFromCSV from "./csv-parser.js";
 import assignmentsModel from "./models/assignments.js";
+import logger from './config/logger.config.js';
 
 // db authenticae
 sequelize.authenticate().then(() => {
     console.log("Connected to the database")
 }).catch(err => {
-    console.error("Error while connecting to the db", err)
+    logger.error("DB connecting error", err)
+    console.error("DB connecting error", err)
 })
 
 const db = {};
-
+ 
 // Sequelize and sequelize properties 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
@@ -31,7 +33,7 @@ db.users.hasMany(db.assignments, {
 
 db.sequelize.sync({ force: false }).then(() => {
     console.log("Database schema synchronized successfully.")
-    
+    logger.info("Database schema synchronized successfully.")
     insertDataFromCSV();
 });
 
