@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import db from '../dbSetup.js';
 import bcrypt from 'bcryptjs';
-import logger from './config/logger.config.js';
+import logger from '../config/logger.config.js';
 
 export default async (req, res, next) => {
   const authHeader = req.headers.authorization;

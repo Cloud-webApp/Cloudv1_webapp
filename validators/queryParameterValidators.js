@@ -1,4 +1,4 @@
-import logger from './config/logger.config.js';
+import logger from '../config/logger.config.js';
 
 const queryParameterValidators = (req, res, next) => {
     if (req.url.includes('?')) {
