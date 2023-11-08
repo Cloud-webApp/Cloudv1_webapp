@@ -1,5 +1,5 @@
 import sequelize from "../sequelize.js";
-import logger from './config/logger.config.js';
+import logger from "../config/logger.config.js";
 
 import StatsD from 'node-statsd';
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 

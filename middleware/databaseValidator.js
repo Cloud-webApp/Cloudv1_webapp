@@ -1,5 +1,5 @@
 import db from '../dbSetup.js';
-import logger from './config/logger.config.js';
+import logger from '../config/logger.config.js';
 export default async (req, res, next) => {
   try {
     // Check if the database connection is successful

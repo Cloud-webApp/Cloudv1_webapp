@@ -4,10 +4,10 @@ import basicAuthenticator from "../middleware/basicAuthenticator.js";
 import _ from "lodash";
 import assignmentValidator from "../validators/assignment.validator.js";
 import queryParameterValidators from "../validators/queryParameterValidators.js";
-import logger from './config/logger.config.js';
+import logger from '../config/logger.config.js';
 
 import StatsD from 'node-statsd';
-import { log } from "winston";
+
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
 
 
