@@ -149,6 +149,12 @@ assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, as
   statsd.increment('endpoint.assignment.delete');
   const { id: assignmentId } = req.params;
 
+    // payload should not be present
+  if (Object.keys(req.body).length !== 0) {
+    logger.error('400 error Bad Request: DELETE request should not have a payload');
+    return res.status(400).json({ error: "Bad Request: DELETE request should not have a payload" });
+  }
+
   try {
     const assignmentInfo = await db.assignments.findOne({
       where: { assignment_id: assignmentId },
