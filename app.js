@@ -16,11 +16,14 @@ app.use(express.json());
 app.use("/healthz", appRoute); // Route for /healthz
 app.use("/v1/assignments", assignmentRoute); // Route for /v1/assignments
 
-// Middleware for all other routes
-app.use("/", (req, res) => {
-  res.status(404).send(); // Return 503 Service Unavailable for all other routes
+// // Middleware for all other routes
+// app.use("/", (req, res) => {
+//   res.status(404).send(); // Return 503 Service Unavailable for all other routes
+// });
+app.get('/', function(req, res){
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello Altaf csye6225\n");
 });
-
 // Express server
 app.listen(PORT, (err) => {
   logger.info("logs from app.js");
