@@ -5,7 +5,7 @@ import _ from "lodash";
 import assignmentValidator from "../validators/assignment.validator.js";
 import queryParameterValidators from "../validators/queryParameterValidators.js";
 import logger from '../config/logger.config.js';
-
+import submissionUrlValidator from "../submissionUrlValidator.js";
 import StatsD from 'node-statsd';
 
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
@@ -29,20 +29,6 @@ assignmentRouter.use("/", async (req, res, next) => {
   next();
 });
 
-// GET all assignments----------------------------------------------------------------------------------
-// assignmentRouter.get("/", queryParameterValidators, async (req, res) => {
-//   try {
-//     const assignmentList = await assignmentDb.findAll({
-//       attributes: { exclude: ["user_id"] },
-//     });
-
-//     res.status(200).json(assignmentList);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send(); // Internal Server Error
-//   }
-// });
-// GET all assignments
 assignmentRouter.get("/",basicAuthenticator, queryParameterValidators, async (req, res) => {
   statsd.increment('endpoint.assignment.getall');
 
@@ -94,55 +80,100 @@ assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
   }
 });
 
-// POST a new assignment ----------------------------------------------------------------------------------
-assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (req, res) => {
-  statsd.increment('endpoint.assignment.post');
+//POST a new assignment ----------------------------------------------------------------------------------
+// assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (req, res) => {
+//   statsd.increment('endpoint.assignment.post');
 
-  const expectedKeys = ["name", "points", "num_of_attemps", "deadline"];
+//   const expectedKeys = ["name", "points", "num_of_attemps", "deadline"];
 
-  // Check for extra keys in the request body
-  const extraKeys = Object.keys(req.body).filter(
-    (key) => !expectedKeys.includes(key)
-  );
+//   // Check for extra keys in the request body
+//   const extraKeys = Object.keys(req.body).filter(
+//     (key) => !expectedKeys.includes(key)
+//   );
 
-  if (extraKeys.length > 0) {
-    logger.error('400 error Invalid keys in the request: ',extraKeys);
-    return res.status(400).json({
-      errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
-    });
-  }
+//   if (extraKeys.length > 0) {
+//     logger.error('400 error Invalid keys in the request: ',extraKeys);
+//     return res.status(400).json({
+//       errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
+//     });
+//   }
 
-  let { name, points, num_of_attemps, deadline } = req.body;
+//   let { name, points, num_of_attemps, deadline } = req.body;
 
-  const { isError: isNotValid, errorMessage } = assignmentValidator.validatePostRequest(req);
+//   const { isError: isNotValid, errorMessage } = assignmentValidator.validatePostRequest(req);
 
-  if (isNotValid) {
-    logger.error('400 error Invalid keys in the request: ',errorMessage);
-    return res.status(400).json({ errorMessage });
-  }
+//   if (isNotValid) {
+//     logger.error('400 error Invalid keys in the request: ',errorMessage);
+//     return res.status(400).json({ errorMessage });
+//   }
 
-  const tempAssignment = {
-    name,
-    points,
-    num_of_attemps,
-    deadline,
-    user_id: req?.authUser?.user_id,
-  };
+//   const tempAssignment = {
+//     name,
+//     points,
+//     num_of_attemps,
+//     deadline,
+//     user_id: req?.authUser?.user_id,
+//   };
 
-  try {
+//   try {
+//     const newAssignment = await assignmentDb.create(tempAssignment);
+//     logger.info('logs from assignment.route.js NEWAssignment-',newAssignment);
+//     // Exclude user_id from the response
+//     const responseAssignment = { ...newAssignment.dataValues };
+//     delete responseAssignment.user_id;
+
+//     //res.status(201).json(responseAssignment);
+//     res.status(201).json(responseAssignment);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send(); // Internal Server Error
+//   }
+// });
+
+assignmentRouter.post(
+  "/",
+  basicAuthenticator,
+  queryParameterValidators,
+  async (req, res) => {
+    let { name, points, num_of_attemps, deadline } = req.body;
+    if(!_.isInteger(points) || !_.isInteger(num_of_attemps)){
+      logger.error("Invalid request body");
+      return res.status(400).json({ error : "Points and Number of Attempts should be Integer" });
+    }
+    const expectedKeys = ["name", "points", "num_of_attemps", "deadline"];
+    // Check if there are any extra keys in the request body
+    const extraKeys = Object.keys(req.body).filter(
+      (key) => !expectedKeys.includes(key)
+    );
+ 
+    if (extraKeys.length > 0) {
+      logger.error("Invalid keys in the request", extraKeys);
+      return res.status(400).json({
+        errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
+      });
+    }
+    const { isError: isNotValid, errorMessage } =
+      assignmentValidator.validatePostRequest(req);
+    if (isNotValid) {
+      logger.error("Invalid request body", errorMessage);
+      return res.status(400).json({ errorMessage });
+    }
+ 
+    const tempAssignment = {
+      name,
+      points,
+      num_of_attemps,
+      deadline,
+      user_id: req?.authUser?.user_id,
+    };
+    //insert the data to data base
     const newAssignment = await assignmentDb.create(tempAssignment);
-    logger.info('logs from assignment.route.js NEWAssignment-',newAssignment);
-    // Exclude user_id from the response
-    const responseAssignment = { ...newAssignment.dataValues };
-    delete responseAssignment.user_id;
-
-    //res.status(201).json(responseAssignment);
-    res.status(201).json(responseAssignment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(); // Internal Server Error
+    logger.info("New assignment created", newAssignment);
+    delete newAssignment.dataValues.user_id;
+    res.status(201).json(newAssignment);
   }
-});
+);
+
 
 // DELETE an assignment by ID----------------------------------------------------------------------------------
 assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, async (req, res) => {
@@ -233,6 +264,68 @@ if (extraKeys.length > 0) {
     res.status(500).send(); // Internal Server Error
   }
 });
+
+const { publishSubmissionToSNS } = require("../snsHelper.js");
+
+assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterValidators, async (req, res) => {
+    const { id: assignmentId } = req.params;
+    const { isError: isNotValid, errorMessage } =
+      assignmentValidator.validateAssignmentPostRequest(req);
+
+    if (isNotValid) {
+      logger.error("Invalid request body", errorMessage);
+      return res.status(400).json({ errorMessage });
+    }
+
+    const { submission_url } = req.body;
+
+    if (!submissionUrlValidator(submission_url)) {
+      logger.error("Invalid Submission URL");
+      return res.status(400).json({ errorMessage: "Invalid Submission URL" });
+    }
+    try {
+      const assignmentInfo = await db.assignments.findOne({
+        where: { assignment_id: assignmentId },
+      });
+
+      const count = await db.submissions.count({
+        where: { assignment_id: assignmentId },
+      });
+      if (_.isEmpty(assignmentInfo)) {
+        logger.error("Assignment with the following id not found", assignmentId);
+        return res.status(404).send();
+      } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
+        logger.warn("Not an authorized user");
+        return res.status(403).json({ error: "You are not an authorized user" });
+      } else if (assignmentInfo.deadline < new Date()) {
+        logger.warn("Assignment deadline is over");
+        return res.status(400).json({ error: "Assignment deadline is over" });
+      } else if (count >= assignmentInfo.num_of_attemps) {
+        logger.warn("Reached max. number of attempts");
+        return res.status(400).json({ error: "You have reached the maximum number of attempts" });
+      }
+
+      const tempSubmission = {
+        submission_url,
+        assignment_id: assignmentId,
+        user_id: req?.authUser?.user_id,
+      };
+
+      // Insert the data into the database
+      const newSubmission = await db.submissions.create(tempSubmission);
+      logger.info("New submission created", newSubmission);
+      delete newSubmission.dataValues.user_id;
+
+      // Publish submission details to SNS
+      await publishSubmissionToSNS(newSubmission, req?.authUser?.email);
+
+      res.status(201).json(newSubmission);
+    } catch (err) {
+      logger.error("Assignment with the following id not found", assignmentId);
+      res.status(404).send();
+    }
+  }
+);
 
 // Helper function to append data to an object if it's not null or undefined
 function appendDataToObject(object, field, value) {
