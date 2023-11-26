@@ -4,7 +4,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import insertDataFromCSV from "./csv-parser.js";
 import assignmentsModel from "./models/assignments.js";
 import logger from './config/logger.config.js';
-
+import submissionsModel from './models/submission.js';
 // db authenticae
 sequelize.authenticate().then(() => {
     console.log("Connected to the database")
@@ -22,7 +22,7 @@ db.sequelize = sequelize;
 //  users  assignments models
 db.users = userModel(sequelize, DataTypes);
 db.assignments = assignmentsModel(sequelize, DataTypes);
-
+db.submissions = submissionsModel(sequelize, DataTypes);
 //relation 
 db.users.hasMany(db.assignments, {
     foreignKey: { name: "user_id" },
@@ -37,4 +37,7 @@ db.sequelize.sync({ force: false }).then(() => {
     insertDataFromCSV();
 });
 
+db.assignments.hasMany(db.submissions,{foreignKey:{name :"assignment_id"},onDelete:"CASCADE",field:"assignment_id",allowNull:false})
+
 export default db;
+ 
