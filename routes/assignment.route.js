@@ -7,6 +7,8 @@ import queryParameterValidators from "../validators/queryParameterValidators.js"
 import logger from '../config/logger.config.js';
 import submissionUrlValidator from "../submissionUrlValidator.js";
 import StatsD from 'node-statsd';
+import * as AWS from 'aws-sdk'; 
+dotenv.config();
 
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
 
@@ -81,55 +83,6 @@ assignmentRouter.get("/:id", queryParameterValidators, async (req, res) => {
 });
 
 //POST a new assignment ----------------------------------------------------------------------------------
-// assignmentRouter.post("/", basicAuthenticator, queryParameterValidators, async (req, res) => {
-//   statsd.increment('endpoint.assignment.post');
-
-//   const expectedKeys = ["name", "points", "num_of_attemps", "deadline"];
-
-//   // Check for extra keys in the request body
-//   const extraKeys = Object.keys(req.body).filter(
-//     (key) => !expectedKeys.includes(key)
-//   );
-
-//   if (extraKeys.length > 0) {
-//     logger.error('400 error Invalid keys in the request: ',extraKeys);
-//     return res.status(400).json({
-//       errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
-//     });
-//   }
-
-//   let { name, points, num_of_attemps, deadline } = req.body;
-
-//   const { isError: isNotValid, errorMessage } = assignmentValidator.validatePostRequest(req);
-
-//   if (isNotValid) {
-//     logger.error('400 error Invalid keys in the request: ',errorMessage);
-//     return res.status(400).json({ errorMessage });
-//   }
-
-//   const tempAssignment = {
-//     name,
-//     points,
-//     num_of_attemps,
-//     deadline,
-//     user_id: req?.authUser?.user_id,
-//   };
-
-//   try {
-//     const newAssignment = await assignmentDb.create(tempAssignment);
-//     logger.info('logs from assignment.route.js NEWAssignment-',newAssignment);
-//     // Exclude user_id from the response
-//     const responseAssignment = { ...newAssignment.dataValues };
-//     delete responseAssignment.user_id;
-
-//     //res.status(201).json(responseAssignment);
-//     res.status(201).json(responseAssignment);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send(); // Internal Server Error
-//   }
-// });
-
 assignmentRouter.post(
   "/",
   basicAuthenticator,
@@ -173,7 +126,6 @@ assignmentRouter.post(
     res.status(201).json(newAssignment);
   }
 );
-
 
 // DELETE an assignment by ID----------------------------------------------------------------------------------
 assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, async (req, res) => {
@@ -265,7 +217,7 @@ if (extraKeys.length > 0) {
   }
 });
 
-const { publishSubmissionToSNS } = require("../snsHelper.js");
+const sns = new AWS.SNS();
 
 assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterValidators, async (req, res) => {
     const { id: assignmentId } = req.params;
@@ -316,8 +268,23 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
       logger.info("New submission created", newSubmission);
       delete newSubmission.dataValues.user_id;
 
-      // Publish submission details to SNS
-      await publishSubmissionToSNS(newSubmission, req?.authUser?.email);
+      // Publisshing submission details to SNS
+      const snsParams = {
+        Message: JSON.stringify({
+          submission_url: newSubmission.submission_url,
+          user_id: newSubmission.user_id,
+          email: req?.authUser?.email,
+        }),
+        TopicArn:  process.env.SNS_TOPIC_ARN, 
+      };
+
+      sns.publish(snsParams, (snsErr, snsData) => {
+        if (snsErr) {
+          logger.error("Error publishing to SNS", snsErr);
+        } else {
+          logger.info("Submission details published to SNS", snsData);
+        }
+      });
 
       res.status(201).json(newSubmission);
     } catch (err) {
