@@ -9,7 +9,7 @@ import submissionUrlValidator from "../submissionUrlValidator.js";
 import StatsD from 'node-statsd';
 import * as AWS from 'aws-sdk'; 
 
-const AWS = require('aws-sdk');
+// const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.AWS_REGION });
 
 dotenv.config();
