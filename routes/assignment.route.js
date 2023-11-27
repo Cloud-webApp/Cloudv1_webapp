@@ -8,11 +8,12 @@ import logger from '../config/logger.config.js';
 import submissionUrlValidator from "../submissionUrlValidator.js";
 import StatsD from 'node-statsd';
 import * as AWS from 'aws-sdk'; 
+import * as dotenv from 'dotenv'
 
+dotenv.config()
 // const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.AWS_REGION });
 
-dotenv.config();
 
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
 
@@ -279,7 +280,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
           user_id: newSubmission.user_id,
           email: req?.authUser?.email,
         }),
-        TopicArn:  process.env.SNS_TOPIC_ARN, 
+        TopicArn:  process.env.topic.arn, 
       };
 
       sns.publish(snsParams, (snsErr, snsData) => {
