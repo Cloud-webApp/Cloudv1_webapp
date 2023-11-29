@@ -285,7 +285,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
       const snsParams = {
         Message: JSON.stringify({
           releaseUrl: newSubmission.submission_url,
-          user_id: newSubmission.user_id,
+          user_id: req?.authUser?.user_id,
           email: req?.authUser?.email,
           assignment_id: assignmentId,
 
