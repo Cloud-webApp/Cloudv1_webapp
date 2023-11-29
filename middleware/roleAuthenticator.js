@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import db from "../dbSetup.js";
 import bcrypt from "bcryptjs";
-import logger from "../configs/logger.config.js";
+import logger from "../config/logger.config.js";
 import StatsD from "node-statsd";
 
 const statsd = new StatsD({ host: "localhost", port: 8125 }); 
