@@ -244,16 +244,25 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
         where: { assignment_id: assignmentId },
       });
 
+      // const count = await db.submissions.count({
+      //   where: { assignment_id: assignmentId },
+      // });
+
       const count = await db.submissions.count({
-        where: { assignment_id: assignmentId },
+        where: {
+          assignment_id: assignmentId,
+          user_id: req?.authUser?.user_id,
+         }, 
       });
       if (_.isEmpty(assignmentInfo)) {
         logger.error("Assignment with the following id not found", assignmentId);
         return res.status(404).send();
-      } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
-        logger.warn("Not an authorized user");
-        return res.status(403).json({ error: "You are not an authorized user" });
-      } else if (assignmentInfo.deadline < new Date()) {
+      } 
+      // else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
+      //   logger.warn("Not an authorized user");
+      //   return res.status(403).json({ error: "You are not an authorized user" });
+      // }
+       else if (assignmentInfo.deadline < new Date()) {
         logger.warn("Assignment deadline is over");
         return res.status(400).json({ error: "Assignment deadline is over" });
       } else if (count >= assignmentInfo.num_of_attemps) {
@@ -272,7 +281,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
       logger.info("New submission created", newSubmission);
       delete newSubmission.dataValues.user_id;
 
-      // Publisshing submission details to SNS
+      // Publisshing submission details to SNS  -url, user_id, email, assignment_id  ,TopicArn
       const snsParams = {
         Message: JSON.stringify({
           releaseUrl: newSubmission.submission_url,
@@ -280,8 +289,6 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
           email: req?.authUser?.email,
           assignment_id: assignmentId,
 
-          // email: user.email,
-          // releaseUrl: req.submission_url,
         }),
         TopicArn: process.env.TopicArn,
       };
