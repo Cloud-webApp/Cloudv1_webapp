@@ -276,7 +276,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
       const snsParams = {
         Message: JSON.stringify({
           releaseUrl: newSubmission.submission_url,
-          user_id: newSubmission.user_id,
+          user_id: req?.authUser?.user_id,
           email: req?.authUser?.email,
           assignment_id: assignmentId,
 
@@ -296,6 +296,8 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
       res.status(201).json(newSubmission);
     } catch (err) {
       logger.error("Assignment with the following id not found", assignmentId);
+      console.log(err);
+      logger.error(err);
       res.status(404).send();
     }
   }
