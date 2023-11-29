@@ -1,6 +1,7 @@
 import { Router } from "express";
 import db from "../dbSetup.js";
 import basicAuthenticator from "../middleware/basicAuthenticator.js";
+//import roleAuthenticator from "../middleware/roleAuthenticator.js";
 import _ from "lodash";
 import assignmentValidator from "../validators/assignment.validator.js";
 import queryParameterValidators from "../validators/queryParameterValidators.js";
@@ -12,6 +13,7 @@ import  AWS from 'aws-sdk';
 AWS.config.update({ region: process.env.region });
 
 import * as dotenv from 'dotenv';
+import roleAuthenticator from "../middleware/roleAuthenticator.js";
 dotenv.config();
 
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
@@ -166,7 +168,7 @@ assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, as
 });
 
 // PUT (update) an assignment by ID----------------------------------------------------------------------------------
-assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
+assignmentRouter.put("/:id", roleAuthenticator, async (req, res) => {
   statsd.increment('endpoint.assignment.put');
   const { id: assignmentId } = req.params;
 
