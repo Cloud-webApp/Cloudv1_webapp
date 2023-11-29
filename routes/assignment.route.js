@@ -1,7 +1,6 @@
 import { Router } from "express";
 import db from "../dbSetup.js";
 import basicAuthenticator from "../middleware/basicAuthenticator.js";
-//import roleAuthenticator from "../middleware/roleAuthenticator.js";
 import _ from "lodash";
 import assignmentValidator from "../validators/assignment.validator.js";
 import queryParameterValidators from "../validators/queryParameterValidators.js";
@@ -13,7 +12,6 @@ import  AWS from 'aws-sdk';
 AWS.config.update({ region: process.env.region });
 
 import * as dotenv from 'dotenv';
-import roleAuthenticator from "../middleware/roleAuthenticator.js";
 dotenv.config();
 
 const statsd = new StatsD({ host: 'localhost', port: 8125 }); 
@@ -168,7 +166,7 @@ assignmentRouter.delete("/:id", basicAuthenticator, queryParameterValidators, as
 });
 
 // PUT (update) an assignment by ID----------------------------------------------------------------------------------
-assignmentRouter.put("/:id", roleAuthenticator, async (req, res) => {
+assignmentRouter.put("/:id", basicAuthenticator, async (req, res) => {
   statsd.increment('endpoint.assignment.put');
   const { id: assignmentId } = req.params;
 
@@ -246,25 +244,16 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
         where: { assignment_id: assignmentId },
       });
 
-      // const count = await db.submissions.count({
-      //   where: { assignment_id: assignmentId },
-      // });
-
       const count = await db.submissions.count({
-        where: {
-          assignment_id: assignmentId,
-          user_id: req?.authUser?.user_id,
-         }, 
+        where: { assignment_id: assignmentId },
       });
       if (_.isEmpty(assignmentInfo)) {
         logger.error("Assignment with the following id not found", assignmentId);
         return res.status(404).send();
-      } 
-      // else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
-      //   logger.warn("Not an authorized user");
-      //   return res.status(403).json({ error: "You are not an authorized user" });
-      // }
-       else if (assignmentInfo.deadline < new Date()) {
+      } else if (assignmentInfo.user_id !== req?.authUser?.user_id) {
+        logger.warn("Not an authorized user");
+        return res.status(403).json({ error: "You are not an authorized user" });
+      } else if (assignmentInfo.deadline < new Date()) {
         logger.warn("Assignment deadline is over");
         return res.status(400).json({ error: "Assignment deadline is over" });
       } else if (count >= assignmentInfo.num_of_attemps) {
@@ -287,7 +276,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
       const snsParams = {
         Message: JSON.stringify({
           releaseUrl: newSubmission.submission_url,
-          user_id: req?.authUser?.user_id,
+          user_id: newSubmission.user_id,
           email: req?.authUser?.email,
           assignment_id: assignmentId,
 
