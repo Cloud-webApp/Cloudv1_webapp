@@ -365,8 +365,8 @@ assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValid
       //insert the data to data base
       const newSubmission = await db.submissions.create(tempSubmission);
       logger.info("New submission created", newSubmission);
-       // Post the URL to the SNS topic along with user info
-       const snsTopicArn = process.env.SNSTopicARN; // Replace with your actual SNS topic ARN
+
+       const snsTopicArn = process.env.SNSTopicARN; 
        const snsMessage = {
          //submission_url: newSubmission.submission_url,
          releaseUrl: newSubmission.submission_url,
