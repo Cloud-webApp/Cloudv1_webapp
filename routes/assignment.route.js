@@ -369,7 +369,7 @@ assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValid
        const snsMessage = {
          //submission_url: newSubmission.submission_url,
          releaseUrl: newSubmission.submission_url,
-         user_email: req?.authUser?.email,
+         email: req?.authUser?.email,
          assignment_id: newSubmission.assignment_id,
          user_id: req?.authUser?.user_id,
        };
