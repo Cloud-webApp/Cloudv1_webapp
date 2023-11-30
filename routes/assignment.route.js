@@ -395,7 +395,10 @@ assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValid
     }
   }
 )
-// Helper function to append data to an object if it's not null or undefined
+
+
+//Helper function to append data to an object if it's not null or undefined
+
 function appendDataToObject(object, field, value) {
   if (!_.isNil(value)) {
     object[field] = value;
@@ -404,6 +407,6 @@ function appendDataToObject(object, field, value) {
 }
 
 export default assignmentRouter;
-
+2
 
 
