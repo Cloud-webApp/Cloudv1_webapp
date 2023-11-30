@@ -223,12 +223,103 @@ if (extraKeys.length > 0) {
 
 const sns = new AWS.SNS({apiVersion: '2010-03-31'});
 
-assignmentRouter.post(
-  "/:id/submissions",
-  userAuthenticator,
-  queryParameterValidators,
+// assignmentRouter.post(
+//   "/:id/submissions",
+//   userAuthenticator,
+//   queryParameterValidators,
+//   async (req, res) => {
+//     const expectedKeys = ["submission_url"];
+//     // Ccheking for extra keys in the req
+//     const extraKeys = Object.keys(req.body).filter(
+//       (key) => !expectedKeys.includes(key)
+//     );
+ 
+//     if (extraKeys.length > 0) {
+//       logger.error("Invalid keys in the request", extraKeys);
+//       return res.status(400).json({
+//         errorMessage: `Invalid keys in the request: ${extraKeys.join(", ")}`,
+//       });
+//     }
+//     const { id: assignmentId } = req.params;
+//     const { isError: isNotValid, errorMessage } =
+//       assignmentValidator.validateAssignmentPostRequest(req);
+//     if (isNotValid) {
+//       logger.error("Invalid request body", errorMessage);
+//       return res.status(400).json({ errorMessage });
+//     }
+//     const { submission_url } = req.body;
+//     if (!submissionUrlValidator(submission_url)) {
+//       logger.error("Invalid Submission URL");
+//       return res.status(400).json({ errorMessage: "Invalid Submission URL" });
+//     }
+//     try {
+//       const assignmentInfo = await db.assignments.findOne({
+//         where: { assignment_id: assignmentId, user_id: req?.authUser?.user_id},
+//       });
+//       const count = await db.submissions.count({
+//         where: {
+//           assignment_id: assignmentId,
+//           user_id: req?.authUser?.user_id,
+//          },
+//       });
+ 
+//       if (_.isEmpty(assignmentInfo)) {
+//         logger.error("Assignment with the follwing id not found", assignmentId);
+//         return res.status(404).send();
+//       }
+//       else if(assignmentInfo.deadline < new Date()){
+//         logger.warn("Assignment deadline is over");
+//         return res.status(400).json({ error: "Assignment deadline is over" });
+//       }else if(count >= assignmentInfo.num_of_attemps){
+//         logger.warn("You have reached the maximum number of attempts");
+//         return res.status(400).json({ error: "You have reached the maximum number of attempts" });
+//       }
+ 
+//       const tempSubmission = {
+//         submission_url,
+//         assignment_id: assignmentId,
+//         user_id: req?.authUser?.user_id,
+//       };
+//       //insert the data to data base
+//       const newSubmission = await db.submissions.create(tempSubmission);
+//       logger.info("New submission created", newSubmission);
+       
+//       // SNS publish----------------------------------------------
+//        const snsMessage = {
+//         releaseUrl: newSubmission.submission_url,
+//         email: req?.authUser?.email,
+//         assignment_id: newSubmission.assignment_id,
+//         user_id: req?.authUser?.user_id,
+//        };
+
+//        const snsParams = {
+//          TopicArn: process.env.TopicArn,
+//          Message: JSON.stringify(snsMessage),
+//        };
+ 
+//        sns.publish(snsParams, (snsError, snsData) => {
+//          if (snsError) {
+//            logger.error("Error publishing to SNS:", snsError);
+//          } else {
+//            logger.info("Message published to SNS:", snsData);
+//          }
+//        });
+//       delete newSubmission.dataValues.user_id;
+//       res.status(201).json(newSubmission);
+//     } catch (err) {
+//       logger.error("Assignment with the following id not found", err);
+//       console.log(err);
+//       res.status(404).send();
+//     }
+//   }
+// )
+  
+
+//Helper function to append data to an object if it's not null or undefined
+assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValidators,
   async (req, res) => {
     const expectedKeys = ["submission_url"];
+    
     // Check if there are any extra keys in the request body
     const extraKeys = Object.keys(req.body).filter(
       (key) => !expectedKeys.includes(key)
@@ -242,6 +333,8 @@ assignmentRouter.post(
     }
     const { id: assignmentId } = req.params;
     const { isError: isNotValid, errorMessage } =
+
+
       assignmentValidator.validateAssignmentPostRequest(req);
     if (isNotValid) {
       logger.error("Invalid request body", errorMessage);
@@ -254,7 +347,7 @@ assignmentRouter.post(
     }
     try {
       const assignmentInfo = await db.assignments.findOne({
-        where: { assignment_id: assignmentId, user_id: req?.authUser?.user_id},
+        where: { assignment_id: assignmentId ,user_id: req?.authUser?.user_id },
       });
       const count = await db.submissions.count({
         where: {
@@ -288,17 +381,17 @@ assignmentRouter.post(
       const newSubmission = await db.submissions.create(tempSubmission);
       logger.info("New submission created", newSubmission);
        // Post the URL to the SNS topic along with user info
-       const snsTopicArn = process.env.TopicArn; // Replace with your actual SNS topic ARN
+       const snsTopicArn = process.env.TopicArn; 
        const snsMessage = {
-        releaseUrl: newSubmission.submission_url,
-        email: req?.authUser?.email,
-        assignment_id: newSubmission.assignment_id,
-        user_id: req?.authUser?.user_id,
+         //submission_url: newSubmission.submission_url,
+         releaseUrl: newSubmission.submission_url,
+         email: req?.authUser?.email,
+         assignment_id: newSubmission.assignment_id,
+         user_id: req?.authUser?.user_id,
        };
-
- 
+     
        const snsParams = {
-         TopicArn: process.env.TopicArn,
+         TopicArn: snsTopicArn,
          Message: JSON.stringify(snsMessage),
        };
  
@@ -318,9 +411,6 @@ assignmentRouter.post(
     }
   }
 )
-  
-
-//Helper function to append data to an object if it's not null or undefined
 
 function appendDataToObject(object, field, value) {
   if (!_.isNil(value)) {
