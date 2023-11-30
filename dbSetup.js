@@ -31,13 +31,15 @@ db.users.hasMany(db.assignments, {
     allowNull: false
 });
 
+db.assignments.hasMany(db.submissions,{foreignKey:{name :"assignment_id"},onDelete:"CASCADE",field:"assignment_id",allowNull:false})
+db.users.hasMany(db.submissions,{foreignKey:{name :"user_id"},onDelete:"CASCADE",field:"user_id",allowNull:false})
+
 db.sequelize.sync({ force: false }).then(() => {
     console.log("Database schema synchronized successfully.")
     logger.info("Database schema synchronized successfully.")
     insertDataFromCSV();
 });
 
-db.assignments.hasMany(db.submissions,{foreignKey:{name :"assignment_id"},onDelete:"CASCADE",field:"assignment_id",allowNull:false})
 
 export default db;
  
