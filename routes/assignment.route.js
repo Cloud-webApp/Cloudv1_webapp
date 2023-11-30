@@ -306,6 +306,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
 assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValidators,
   async (req, res) => {
     const expectedKeys = ["submission_url"];
+    
     // Check if there are any extra keys in the request body
     const extraKeys = Object.keys(req.body).filter(
       (key) => !expectedKeys.includes(key)
