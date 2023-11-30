@@ -306,6 +306,7 @@ assignmentRouter.post( "/:id/submissions",basicAuthenticator, queryParameterVali
 assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValidators,
   async (req, res) => {
     const expectedKeys = ["submission_url"];
+    
     // Check if there are any extra keys in the request body
     const extraKeys = Object.keys(req.body).filter(
       (key) => !expectedKeys.includes(key)
@@ -365,7 +366,7 @@ assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValid
       const newSubmission = await db.submissions.create(tempSubmission);
       logger.info("New submission created", newSubmission);
        // Post the URL to the SNS topic along with user info
-       const snsTopicArn = process.env.SNSTopicARN; // Replace with your actual SNS topic ARN
+       const snsTopicArn = process.env.SNSTopicARN; 
        const snsMessage = {
          //submission_url: newSubmission.submission_url,
          releaseUrl: newSubmission.submission_url,
@@ -373,7 +374,7 @@ assignmentRouter.post( "/:id/submissions",userAuthenticator, queryParameterValid
          assignment_id: newSubmission.assignment_id,
          user_id: req?.authUser?.user_id,
        };
- 
+     
        const snsParams = {
          TopicArn: snsTopicArn,
          Message: JSON.stringify(snsMessage),
@@ -407,6 +408,3 @@ function appendDataToObject(object, field, value) {
 }
 
 export default assignmentRouter;
-2
-
-
