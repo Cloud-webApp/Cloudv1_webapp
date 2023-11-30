@@ -290,11 +290,12 @@ assignmentRouter.post(
        // Post the URL to the SNS topic along with user info
        const snsTopicArn = process.env.SNSTopicARN; // Replace with your actual SNS topic ARN
        const snsMessage = {
-         submission_url: newSubmission.submission_url,
-         user_email: req?.authUser?.email,
-         assignment_id: newSubmission.assignment_id,
-         user_id: req?.authUser?.user_id,
+        releaseUrl: newSubmission.submission_url,
+        email: req?.authUser?.email,
+        assignment_id: newSubmission.assignment_id,
+        user_id: req?.authUser?.user_id,
        };
+
  
        const snsParams = {
          TopicArn: snsTopicArn,
