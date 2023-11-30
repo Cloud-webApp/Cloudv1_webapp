@@ -298,7 +298,7 @@ assignmentRouter.post(
 
  
        const snsParams = {
-         TopicArn: snsTopicArn,
+         TopicArn: process.env.TopicArn,
          Message: JSON.stringify(snsMessage),
        };
  
