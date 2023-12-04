@@ -1,14 +1,24 @@
-# Web-App 
-Developed by Altaf Shaikh
+# :spider_web: Web-App 
 
-This web application provides a platform for managing assignments by different users.
+## :ninja: Author
+
+[Altaf Shaikh](mailto:shaikh.alt@northeastern.edu)
+
+This web application provides a platform for managing assignments by different users, submitting it and downloading via email link.
+
+Below are example of how to perform CD - Instance Refresh and a demo api reference
+[![Instance Refresh](https://github.com/Cloud-webApp/Cloudv1_webapp/blob/main/.github/workflows/build-ami-on-merge.yml)]
+
+RESTful Backend API service for a fullstack web application.
+
+Demo API for reference: [Swaggerhub](https://app.swaggerhub.com/apis-docs/csye6225-webapp/cloud-native-webapp/fall2023-a9#/authenticated/assignment_submission)
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
-- Node.js installed
-- PostgreSQL database set up
-- Clone this repository
+- `git` (configured with ssh) [[link](https://git-scm.com/downloads)]
+- `node v.16.17.0` and above [[link](https://nodejs.org/en/download/)]
+- `Postman` to demo hit the APIs [[link](https://www.postman.com/downloads/)]
 
 ## Build and Deploy
 
@@ -50,3 +60,11 @@ Before you begin, ensure you have met the following requirements:
    
    ```bash
    node app.js  //or npm start 
+
+## :ninja: Author
+
+[Altaf Shaikh](mailto:shaikh.alt@northeastern.edu)
+
+## :scroll: License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
