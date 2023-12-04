@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use("/healthz", appRoute); // Route for /healthz
-app.use("/v1/assignments", assignmentRoute); // Route for /v1/assignments
+//app.use("/v1/assignments", assignmentRoute); // Route for /v1/assignments
 
 //new change v2 assignment
 app.use("/v2/assignments", assignmentRoute); 
