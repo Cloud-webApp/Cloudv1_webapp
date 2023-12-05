@@ -229,6 +229,13 @@ After the AMI is built, we will create a new version of the launch template and 
 
 Using the `instance-refresh` approach, we are just replacing the golden image in our app infra where instances using an older golden image are sacked, and new instances are launched using the latest golden image(AMI).
 
+## Importing SSL certficates.
+Add a custom SSL certificate from namecheap, and import into ACM using below command
+
+   ```bash 
+   aws acm import-certificate --certificate file://Certificate.pem --certificate-chain file://CertificateChain.pem --private-key file://PrivateKey.pem --profile demo
+   ```
+
 
 ## :surfer: Author
 
