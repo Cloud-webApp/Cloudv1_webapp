@@ -17,7 +17,7 @@ app.use("/healthz", appRoute); // Route for /healthz
 //app.use("/v1/assignments", assignmentRoute); // Route for /v1/assignments
 
 //new change v2 assignment
-app.use("/v2/assignments", assignmentRoute); 
+app.use("/v1/assignments", assignmentRoute); 
 
 app.get('/', function(req, res){
   res.writeHead(200, { "Content-Type": "text/plain" });
